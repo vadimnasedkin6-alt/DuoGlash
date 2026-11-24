@@ -6,7 +6,7 @@
         <meta name="referrer" content="no-referrer" />
         <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';" />
         <title>duoglash — слепая печать</title>
-        <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Crect width='28' height='28' rx='6' fill='%231A1C20'/%3E%3Ccircle cx='5' cy='7' r='1.45' fill='%23EFEFF1'/%3E%3Ccircle cx='8' cy='7' r='1.45' fill='%23EFEFF1'/%3E%3Ccircle cx='5' cy='10' r='1.45' fill='%23EFEFF1'/%3E%3Ccircle cx='11' cy='10' r='1.45' fill='%23EFEFF1'/%3E%3Ccircle cx='5' cy='13' r='1.45' fill='%23EFEFF1'/%3E%3Ccircle cx='11' cy='13' r='1.45' fill='%23EFEFF1'/%3E%3Ccircle cx='5' cy='16' r='1.45' fill='%23EFEFF1'/%3E%3Ccircle cx='8' cy='16' r='1.45' fill='%23EFEFF1'/%3E%3Ccircle cx='19' cy='7' r='1.45' fill='%23EFEFF1'/%3E%3Ccircle cx='22' cy='7' r='1.45' fill='%23EFEFF1'/%3E%3Ccircle cx='16' cy='10' r='1.45' fill='%23EFEFF1'/%3E%3Ccircle cx='16' cy='13' r='1.45' fill='%23EFEFF1'/%3E%3Ccircle cx='20' cy='13' r='1.45' fill='%23EFEFF1'/%3E%3Ccircle cx='23' cy='13' r='1.45' fill='%23EFEFF1'/%3E%3Ccircle cx='19' cy='16' r='1.45' fill='%23EFEFF1'/%3E%3Ccircle cx='22' cy='16' r='1.45' fill='%23EFEFF1'/%3E%3Ccircle cx='14' cy='22' r='2.2' fill='%23D71921'/%3E%3C/svg%3E">
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Doto:wght@500;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -1288,10 +1288,17 @@
 
             .hidden-input {
                 position: absolute;
+                left: 0;
+                top: 0;
+                width: 1px;
+                height: 1px;
                 opacity: 0;
-                pointer-events: none;
-                width: 0;
-                height: 0;
+                font-size: 16px;
+                border: none;
+                outline: none;
+                background: transparent;
+                color: transparent;
+                caret-color: transparent;
             }
 
             /* ================= АВТОРИЗАЦИЯ ================= */
@@ -1687,6 +1694,7 @@
                 grid-template-columns: 1.15fr 0.85fr;
                 gap: 12px;
                 margin-bottom: 14px;
+                align-items: stretch;
             }
 
             .panel-card {
@@ -1708,11 +1716,18 @@
             }
 
             .heatmap-rows {
+                flex: 1;
                 display: flex;
                 flex-direction: column;
-                gap: 5px;
+                justify-content: center;
                 align-items: center;
-                padding: 6px 0;
+                gap: 6px;
+                padding: 12px 8px;
+                background: var(--bg);
+                border: 1px solid var(--border);
+                border-radius: var(--r-md);
+                max-width: 100%;
+                overflow-x: auto;
             }
             .heatmap-row {
                 display: flex;
@@ -1781,12 +1796,17 @@
             }
 
             .activity-matrix {
+                height: 92px;
+                background: var(--bg);
+                border: 1px solid var(--border);
+                border-radius: var(--r-md);
+                padding: 8px;
                 display: grid;
-                grid-template-columns: repeat(14, 1fr);
-                gap: 5px;
+                align-content: center;
+                justify-content: center;
+                overflow: hidden;
             }
             .act-dot {
-                aspect-ratio: 1;
                 border-radius: 2px;
                 background: var(--surface-2);
                 border: 1px solid #1c1e23;
@@ -1896,10 +1916,489 @@
                 display: inline-flex;
             }
 
+            /* ================= БУСТ, УРОВНИ, ТИТУЛЫ, ПРЕВЬЮ, МОДАЛКА ================= */
+            .boost-meta {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+                font-size: 11.5px;
+                color: var(--text-dim);
+                font-family: var(--font-mono);
+            }
+            .streak-pill {
+                color: var(--accent-yellow);
+                font-weight: 500;
+            }
+
+            .profile-title-row {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                flex-wrap: wrap;
+                margin-bottom: 4px;
+            }
+            .title-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                font-family: var(--font-dot);
+                font-size: 11.5px;
+                font-weight: 700;
+                letter-spacing: 0.05em;
+                text-transform: uppercase;
+                padding: 3px 8px;
+                border-radius: 4px;
+                background: var(--surface-2);
+                border: 1px solid var(--border-strong);
+                color: var(--text-main);
+            }
+            .title-badge.master {
+                border-color: rgba(234, 179, 8, 0.55);
+                color: var(--accent-yellow);
+                background: rgba(234, 179, 8, 0.08);
+            }
+            .title-badge.legend {
+                border-color: rgba(215, 25, 33, 0.65);
+                color: #f46b70;
+                background: rgba(215, 25, 33, 0.1);
+            }
+
+            .level-box {
+                min-width: 185px;
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+            }
+            .level-head {
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+                gap: 12px;
+            }
+            .level-num {
+                font-family: var(--font-dot);
+                font-size: 20px;
+                font-weight: 800;
+                color: var(--accent-yellow);
+            }
+            .level-xp-sub {
+                font-family: var(--font-mono);
+                font-size: 11px;
+                color: var(--text-muted);
+            }
+
+            .titles-grid {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .title-chip {
+                background: var(--bg);
+                border: 1px solid var(--border);
+                border-radius: var(--r-md);
+                padding: 7px 11px;
+                color: var(--text-muted);
+                font-family: var(--font-ui);
+                font-size: 12.5px;
+                display: inline-flex;
+                align-items: center;
+                gap: 7px;
+                cursor: pointer;
+                transition: all 0.15s ease;
+            }
+            .title-chip:hover:not(:disabled) {
+                border-color: var(--border-strong);
+                color: var(--text-main);
+            }
+            .title-chip.selected {
+                background: var(--surface-2);
+                border-color: var(--accent-yellow);
+                color: var(--text-main);
+            }
+            .title-chip.master {
+                color: var(--accent-yellow);
+            }
+            .title-chip.locked {
+                opacity: 0.36;
+                cursor: not-allowed;
+            }
+            .title-chip-sub {
+                font-family: var(--font-mono);
+                font-size: 10.5px;
+                color: var(--text-dim);
+            }
+
+            .analytics-controls {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                flex-wrap: wrap;
+            }
+
+            /* Наглядные настройки */
+            .settings-panel {
+                background: var(--surface-1);
+                border: 1px solid var(--border);
+                border-radius: var(--r-lg);
+                padding: 18px 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+                margin-bottom: 14px;
+            }
+            .settings-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+            .seg-visual {
+                background: var(--bg);
+                border: 1px solid var(--border);
+                padding: 3px;
+                border-radius: var(--r-md);
+                display: inline-flex;
+                gap: 3px;
+            }
+            .seg-visual button {
+                background: transparent;
+                border: none;
+                color: var(--text-muted);
+                border-radius: 5px;
+                padding: 5px 12px;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                gap: 7px;
+                font-family: var(--font-ui);
+                font-size: 12px;
+                transition: all 0.15s ease;
+            }
+            .seg-visual button.active {
+                background: var(--surface-2);
+                color: var(--text-main);
+                box-shadow: inset 0 0 0 1px var(--border-strong);
+            }
+            .glyph-sm {
+                font-family: var(--font-mono);
+                font-size: 12px;
+            }
+            .glyph-md {
+                font-family: var(--font-mono);
+                font-size: 15px;
+            }
+            .glyph-lg {
+                font-family: var(--font-mono);
+                font-size: 19px;
+            }
+            .caret-ico {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 14px;
+                height: 18px;
+                position: relative;
+            }
+            .caret-ico.line::after {
+                content: '';
+                width: 2px;
+                height: 14px;
+                background: var(--accent-yellow);
+            }
+            .caret-ico.block::after {
+                content: '';
+                width: 9px;
+                height: 14px;
+                border-radius: 2px;
+                background: rgba(234, 179, 8, 0.45);
+                border: 1px solid var(--accent-yellow);
+            }
+            .caret-ico.underline::after {
+                content: '';
+                position: absolute;
+                bottom: 2px;
+                width: 11px;
+                height: 2.5px;
+                background: var(--accent-yellow);
+            }
+
+            .settings-preview {
+                background: var(--bg);
+                border: 1px solid var(--border);
+                border-radius: var(--r-md);
+                padding: 12px 16px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 14px;
+                flex-wrap: wrap;
+            }
+            .settings-preview-text {
+                font-family: var(--font-mono);
+                font-size: var(--typing-size);
+                line-height: var(--typing-lh);
+                color: var(--text-dim);
+            }
+
+            /* Модалка поздравления с окончанием курса */
+            .modal-backdrop {
+                position: fixed;
+                inset: 0;
+                background: rgba(5, 5, 6, 0.78);
+                backdrop-filter: blur(4px);
+                display: none;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+                z-index: 120;
+            }
+            .modal-backdrop.visible {
+                display: flex;
+            }
+            .modal-card {
+                width: 100%;
+                max-width: 480px;
+                background: var(--surface-1);
+                border: 1px solid var(--border-strong);
+                border-radius: var(--r-lg);
+                padding: 28px;
+                display: flex;
+                flex-direction: column;
+                gap: 18px;
+            }
+            .modal-card h2 {
+                font-size: 22px;
+                font-weight: 600;
+                letter-spacing: -0.02em;
+            }
+            .modal-card p {
+                font-size: 14px;
+                line-height: 1.55;
+                color: var(--text-muted);
+            }
+            .modal-reward {
+                background: var(--bg);
+                border: 1px solid var(--border);
+                border-radius: var(--r-md);
+                padding: 14px 16px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 12px;
+            }
+            .modal-actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 10px;
+                margin-top: 4px;
+            }
+
+            /* ================= АКЦЕНТНЫЕ ТЕМЫ (ПО УРОВНЯМ) ================= */
+            body[data-theme='amber'] {
+                --accent-red: #ea580c;
+                --accent-yellow: #f59e0b;
+            }
+            body[data-theme='mint'] {
+                --accent-red: #059669;
+                --accent-yellow: #34d399;
+            }
+            body[data-theme='mono'] {
+                --accent-red: #efeff1;
+                --accent-yellow: #d4d4d8;
+            }
+
+            /* Опечатки всегда остаются красными независимо от темы */
+            .char.incorrect {
+                color: #d71921;
+            }
+            .char.incorrect.is-space {
+                background: rgba(215, 25, 33, 0.25);
+            }
+
+            /* ================= ПРЕСТИЖ В ШАПКЕ ================= */
+            .prestige-dots {
+                display: inline-flex;
+                align-items: center;
+                gap: 3px;
+                flex-shrink: 0;
+            }
+            .prestige-dots:empty {
+                display: none;
+            }
+            .prestige-dot {
+                width: 4px;
+                height: 4px;
+                border-radius: 50%;
+                background: var(--accent-yellow);
+            }
+            .prestige-dot.hi {
+                background: var(--accent-red);
+            }
+
+            /* ================= ДОСТИЖЕНИЯ (КНОПКА + МОДАЛКА) И ЗАМОРОЗКА ================= */
+            .perks-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+                margin-bottom: 14px;
+                align-items: stretch;
+            }
+            .perk-card {
+                justify-content: space-between;
+            }
+            .perk-stat-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+                gap: 10px;
+            }
+            .perk-main-num {
+                font-family: var(--font-ui);
+                font-size: 20px;
+                font-weight: 600;
+                color: var(--text-main);
+                letter-spacing: -0.01em;
+            }
+            .perk-sub-meta {
+                font-family: var(--font-mono);
+                font-size: 11.5px;
+                color: var(--text-muted);
+            }
+            .perk-desc {
+                font-size: 12.5px;
+                line-height: 1.5;
+                color: var(--text-muted);
+            }
+
+            .ach-modal-card {
+                max-width: 680px;
+                max-height: 82vh;
+            }
+            .ach-modal-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                overflow-y: auto;
+                padding-right: 4px;
+            }
+            .ach-card {
+                background: var(--bg);
+                border: 1px solid var(--border);
+                border-radius: var(--r-md);
+                padding: 13px 14px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                gap: 8px;
+                opacity: 0.58;
+            }
+            .ach-card.done {
+                opacity: 1;
+                border-color: rgba(234, 179, 8, 0.45);
+            }
+            .ach-top {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 8px;
+            }
+            .ach-name {
+                font-size: 13.5px;
+                font-weight: 600;
+                color: var(--text-main);
+            }
+            .ach-xp {
+                font-family: var(--font-mono);
+                font-size: 11.5px;
+                color: var(--accent-yellow);
+                white-space: nowrap;
+            }
+            .ach-desc {
+                font-size: 12px;
+                line-height: 1.45;
+                color: var(--text-muted);
+            }
+            .ach-status {
+                font-family: var(--font-mono);
+                font-size: 11px;
+                color: var(--text-dim);
+            }
+            .ach-card.done .ach-status {
+                color: var(--accent-ok);
+            }
+
+            /* ================= ЗАБЛОКИРОВАННЫЕ ЭЛЕМЕНТЫ И ПОДСКАЗКА ================= */
+            .module-card.locked,
+            .lesson-row.locked,
+            .lesson-row.locked .btn-locked,
+            .stage-step.locked-step,
+            .title-chip.locked,
+            .seg-visual button.locked-opt {
+                cursor: default !important;
+            }
+
+            .lock-hint {
+                position: fixed;
+                z-index: 200;
+                max-width: 280px;
+                background: var(--surface-2);
+                border: 1px solid var(--border-strong);
+                color: var(--text-main);
+                font-family: var(--font-ui);
+                font-size: 12px;
+                line-height: 1.4;
+                padding: 7px 11px;
+                border-radius: var(--r-md);
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+                pointer-events: none;
+                opacity: 0;
+                transform: translateY(4px);
+                transition:
+                    opacity 0.14s ease,
+                    transform 0.14s ease;
+            }
+            .lock-hint.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            /* ================= КАСТОМИЗАЦИЯ ПО УРОВНЯМ ================= */
+            .swatch-pair {
+                display: inline-flex;
+                align-items: center;
+                gap: 3px;
+            }
+            .swatch-dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                display: inline-block;
+            }
+            .seg-visual button.locked-opt {
+                opacity: 0.42;
+                cursor: not-allowed;
+            }
+            .lvl-tag {
+                font-family: var(--font-mono);
+                font-size: 10px;
+                color: var(--text-dim);
+            }
+
+            /* ================= АДАПТИВ (ПЛАНШЕТЫ И МОБИЛЬНЫЕ) ================= */
+            .heatmap-rows {
+                max-width: 100%;
+                overflow-x: auto;
+                padding-bottom: 4px;
+            }
+
             @media (max-width: 860px) {
                 header {
                     grid-template-columns: 1fr;
                     justify-items: center;
+                    padding: 14px 16px 12px;
+                    gap: 10px;
                 }
                 .brand,
                 .header-controls {
@@ -1907,11 +2406,15 @@
                 }
                 .modules-grid,
                 .profile-courses-grid,
-                .analytics-grid {
+                .analytics-grid,
+                .perks-grid {
                     grid-template-columns: 1fr;
                 }
                 .profile-stats-grid {
                     grid-template-columns: repeat(2, 1fr);
+                }
+                .ach-list {
+                    grid-template-columns: 1fr;
                 }
                 .stage-strip {
                     grid-template-columns: repeat(2, 1fr);
@@ -1933,9 +2436,128 @@
                     min-width: 130px;
                 }
                 .hm-key {
-                    width: 22px;
-                    height: 22px;
+                    width: 24px;
+                    height: 24px;
+                    font-size: 10px;
+                }
+            }
+
+            @media (max-width: 560px) {
+                main {
+                    padding: 16px 12px 36px;
+                }
+                .header-controls {
+                    width: 100%;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                }
+                .volume-slider {
+                    width: 48px;
+                }
+                .profile-btn {
+                    max-width: 190px;
+                }
+                .course-bar {
+                    gap: 14px;
+                    margin-bottom: 18px;
+                    padding-bottom: 14px;
+                }
+                .daily-box {
+                    width: 100%;
+                    min-width: 0;
+                }
+                .course-tab {
+                    font-size: 13px;
+                    padding: 8px 12px;
+                }
+
+                .trainer-top {
+                    flex-direction: column;
+                    align-items: stretch;
+                    gap: 12px;
+                }
+                .metrics {
+                    margin-left: 0;
+                    justify-content: space-between;
+                    width: 100%;
+                    gap: 12px;
+                }
+                .metric-item {
+                    align-items: flex-start;
+                }
+                .metric-v {
+                    font-size: 21px;
+                }
+
+                body[data-font-size='sm'] {
+                    --typing-size: 16px;
+                    --typing-lh: 30px;
+                }
+                body[data-font-size='md'] {
+                    --typing-size: 19px;
+                    --typing-lh: 35px;
+                }
+                body[data-font-size='lg'] {
+                    --typing-size: 22px;
+                    --typing-lh: 40px;
+                }
+
+                .typing-stage {
+                    padding: 16px 14px 14px;
+                }
+                .stage-header-bar {
+                    margin-bottom: 12px;
+                    padding-bottom: 10px;
+                }
+                .stage-result {
+                    padding: 14px;
+                }
+                .result-actions {
+                    width: 100%;
+                }
+                .result-actions .btn {
+                    flex: 1;
+                }
+                .trainer-hints {
+                    flex-wrap: wrap;
+                    font-size: 11px;
+                }
+
+                .profile-hero {
+                    padding: 16px;
+                }
+                .level-box {
+                    width: 100%;
+                }
+                .panel-card,
+                .settings-panel {
+                    padding: 14px;
+                }
+                .seg-visual {
+                    flex-wrap: wrap;
+                }
+                .seg-visual button {
+                    padding: 5px 9px;
+                    font-size: 11.5px;
+                }
+                .visual-kbd {
+                    padding: 8px 4px;
+                    overflow-x: auto;
+                    align-items: flex-start;
+                }
+                .kbd-key {
+                    min-width: 21px;
+                    height: 26px;
                     font-size: 9.5px;
+                    padding: 0 3px;
+                }
+                .hm-key {
+                    width: 21px;
+                    height: 21px;
+                    font-size: 9px;
+                }
+                .ach-modal-grid {
+                    grid-template-columns: 1fr;
                 }
             }
         </style>
@@ -1989,6 +2611,7 @@
                 <button class="profile-btn" id="profileHeaderBtn" title="Войти или создать профиль">
                     <span class="profile-mini-avatar" id="headerAvatar"></span>
                     <span class="profile-nick" id="headerNick">Войти</span>
+                    <span class="prestige-dots" id="headerPrestige"></span>
                 </button>
             </div>
         </header>
@@ -2014,12 +2637,16 @@
                         </div>
                     </div>
 
-                    <div class="daily-box">
+                    <div class="daily-box" title="Двойной опыт на первые 100 базового XP каждый день">
                         <div class="daily-header">
-                            <span class="daily-label">Цель дня</span>
-                            <span class="daily-xp" id="dailyXpText">0 / 100 XP</span>
+                            <span class="daily-label">Буст дня ×2</span>
+                            <span class="daily-xp" id="dailyXpText">100 XP осталось</span>
                         </div>
                         <div class="dot-meter" id="dailyMeter"></div>
+                        <div class="boost-meta">
+                            <span id="boostStatusText">Активен ×2 к опыту</span>
+                            <span class="streak-pill" id="streakBadge">0 дн. подряд</span>
+                        </div>
                     </div>
                 </div>
 
@@ -2232,14 +2859,23 @@
                     <div class="profile-identity">
                         <div class="profile-avatar-lg" id="profileAvatarLg">DG</div>
                         <div class="profile-identity-text">
-                            <h1 id="profileFullNick">—</h1>
+                            <div class="profile-title-row">
+                                <h1 id="profileFullNick">—</h1>
+                                <span class="title-badge" id="profileTitleBadge">Новичок</span>
+                            </div>
                             <div class="profile-meta-line" id="profileMetaLine">ПРОФИЛЬ · СОЗДАН —</div>
                         </div>
                     </div>
 
-                    <div class="profile-xp-badge">
-                        <span>Всего опыта</span>
-                        <strong id="profileTotalXp">0 XP</strong>
+                    <div class="profile-xp-badge level-box">
+                        <div class="level-head">
+                            <strong class="level-num" id="profileLevel">LVL 01</strong>
+                            <span class="level-xp-sub" id="profileTotalXp">0 XP</span>
+                        </div>
+                        <div class="bar-track" style="width: 100%">
+                            <div class="bar-fill yellow" id="profileLevelBar" style="width: 0%"></div>
+                        </div>
+                        <span class="level-xp-sub" id="profileNextLvl">0 / 80 до LVL 02</span>
                     </div>
                 </div>
 
@@ -2331,46 +2967,129 @@
                         <div class="panel-head">
                             <div class="section-eyebrow">
                                 <span class="eyebrow-dot yellow"></span>
-                                ДИНАМИКА (БУКВ/МИН)
+                                ДИНАМИКА И АКТИВНОСТЬ
                             </div>
-                            <span class="stage-pills" id="chartRangeLabel">последние 20 сессий</span>
+                            <div class="analytics-controls">
+                                <div class="seg-mini" id="periodSeg">
+                                    <button type="button" data-days="7">7д</button>
+                                    <button type="button" data-days="14" class="active">14д</button>
+                                    <button type="button" data-days="30">30д</button>
+                                    <button type="button" data-days="0">Всё</button>
+                                </div>
+                                <div class="seg-mini" id="chartTypeSeg">
+                                    <button type="button" data-chart="line" class="active">Линия</button>
+                                    <button type="button" data-chart="bar">Столбцы</button>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="chart-box" id="chartBox"></div>
 
                         <div class="panel-head" style="margin-top: 2px">
-                            <span class="setting-label">Активность (последние 42 дня)</span>
-                            <span class="stage-pills" id="activeDaysLabel">0 дней</span>
+                            <span class="setting-label" id="activityTitle">Активность (14 дн.)</span>
+                            <span class="stage-pills" id="activeDaysLabel">0 дн.</span>
                         </div>
                         <div class="activity-matrix" id="activityMatrix"></div>
                     </div>
                 </div>
 
+                <!-- ТИТУЛЫ ПРОФИЛЯ -->
+                <div class="panel-card" style="margin-bottom: 14px">
+                    <div class="panel-head">
+                        <div class="section-eyebrow">
+                            <span class="eyebrow-dot"></span>
+                            ТИТУЛЫ ПРОФИЛЯ
+                        </div>
+                        <span class="stage-pills" id="titlesCounter">1 / 15 открыто</span>
+                    </div>
+                    <div class="titles-grid" id="titlesGrid"></div>
+                </div>
+
+                <!-- ДОСТИЖЕНИЯ И ЗАМОРОЗКА СЕРИИ -->
+                <!-- ДОСТИЖЕНИЯ И ЗАМОРОЗКА СЕРИИ -->
+                <div class="perks-grid">
+                    <div class="panel-card perk-card">
+                        <div class="panel-head">
+                            <div class="section-eyebrow">
+                                <span class="eyebrow-dot yellow"></span>
+                                ДОСТИЖЕНИЯ
+                            </div>
+                            <span class="stage-pills" id="achCounter">0 / 12</span>
+                        </div>
+                        <div class="perk-stat-row">
+                            <span class="perk-main-num" id="achDoneSummary">0 открыто</span>
+                            <span class="perk-sub-meta" id="achEarnedXp">0 / 860 XP</span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill yellow" id="achProgressBar" style="width: 0%"></div>
+                        </div>
+                        <p class="perk-desc">Выполняйте испытания на точность, скорость и регулярность ради бонусного опыта.</p>
+                        <button class="btn btn-secondary btn-sm" id="openAchModalBtn">Показать все достижения</button>
+                    </div>
+
+                    <div class="panel-card perk-card">
+                        <div class="panel-head">
+                            <div class="section-eyebrow">
+                                <span class="eyebrow-dot"></span>
+                                ЗАМОРОЗКА СЕРИИ
+                            </div>
+                            <span class="stage-pills">макс. 3</span>
+                        </div>
+                        <div class="perk-stat-row">
+                            <span class="perk-main-num" id="freezeCountVal">0 шт.</span>
+                            <span class="perk-sub-meta" id="xpBalanceVal">Баланс: 0 XP</span>
+                        </div>
+                        <p class="perk-desc">Страхует серию при пропуске одного дня. Списывается автоматически, уровень не падает.</p>
+                        <button class="btn btn-primary btn-sm" id="buyFreezeBtn">Купить за 250 XP</button>
+                    </div>
+                </div>
+
                 <!-- КАСТОМИЗАЦИЯ И БЭКАП -->
-                <div class="settings-grid">
-                    <div class="setting-block">
-                        <span class="setting-label">Шрифт печати</span>
-                        <div class="seg-mini" id="fontSizeSeg">
-                            <button type="button" data-size="sm">S</button>
-                            <button type="button" data-size="md" class="active">M</button>
-                            <button type="button" data-size="lg">L</button>
+                <div class="settings-panel">
+                    <div class="settings-row">
+                        <div class="setting-block">
+                            <span class="setting-label">Шрифт</span>
+                            <div class="seg-visual" id="fontSizeSeg">
+                                <button type="button" data-size="sm"><span class="glyph-sm">Аа</span><span>S</span></button>
+                                <button type="button" data-size="md" class="active"><span class="glyph-md">Аа</span><span>M</span></button>
+                                <button type="button" data-size="lg"><span class="glyph-lg">Аа</span><span>L</span></button>
+                            </div>
+                        </div>
+
+                        <div class="setting-block">
+                            <span class="setting-label">Курсор</span>
+                            <div class="seg-visual" id="caretStyleSeg">
+                                <button type="button" data-caret="line" class="active"><span class="caret-ico line"></span><span>Линия</span></button>
+                                <button type="button" data-caret="block"><span class="caret-ico block"></span><span>Блок</span></button>
+                                <button type="button" data-caret="underline"><span class="caret-ico underline"></span><span>Черта</span></button>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="setting-block">
-                        <span class="setting-label">Курсор</span>
-                        <div class="seg-mini" id="caretStyleSeg">
-                            <button type="button" data-caret="line" class="active">Линия</button>
-                            <button type="button" data-caret="block">Блок</button>
-                            <button type="button" data-caret="underline">Черта</button>
+                    <div class="settings-row">
+                        <div class="setting-block">
+                            <span class="setting-label">Акцент</span>
+                            <div class="seg-visual" id="themeSeg"></div>
+                        </div>
+
+                        <div class="setting-block">
+                            <span class="setting-label">Звук клавиш</span>
+                            <div class="seg-visual" id="soundSeg"></div>
                         </div>
                     </div>
 
-                    <div class="setting-block">
-                        <button class="btn btn-secondary btn-sm" id="exportBackupBtn"></button>
-                        <button class="btn btn-secondary btn-sm" id="importBackupBtn"></button>
-                        <input type="file" id="importFileInput" accept="application/json,.json" style="display: none" />
-                        <button class="btn btn-secondary btn-sm" id="resetSettingsBtn">Сброс настроек</button>
+                    <div class="settings-preview">
+                        <div class="settings-preview-text no-ligatures"><span class="char correct">ритм </span><span class="char current">п</span><span>ечати без пауз</span></div>
+                        <span class="stage-pills" id="previewMeta">24 px · Линия</span>
+                    </div>
+
+                    <div class="settings-row">
+                        <div class="setting-block">
+                            <button class="btn btn-secondary btn-sm" id="exportBackupBtn"></button>
+                            <button class="btn btn-secondary btn-sm" id="importBackupBtn"></button>
+                            <input type="file" id="importFileInput" accept="application/json,.json" style="display: none" />
+                            <button class="btn btn-secondary btn-sm" id="resetSettingsBtn">Сброс настроек</button>
+                        </div>
                     </div>
                 </div>
 
@@ -2383,6 +3102,43 @@
                 </div>
             </section>
         </main>
+
+        <div class="modal-backdrop" id="courseModal">
+            <div class="modal-card">
+                <div class="section-eyebrow"><span class="eyebrow-dot yellow"></span>КУРС ЗАВЕРШЁН · 100%</div>
+                <h2 id="courseModalTitle">Поздравляем!</h2>
+                <p id="courseModalDesc"></p>
+                <div class="modal-reward">
+                    <div>
+                        <div class="setting-label" style="margin-bottom: 4px">Новый титул</div>
+                        <span class="title-badge master" id="courseModalBadge">Мастер</span>
+                    </div>
+                    <div style="text-align: right">
+                        <div class="setting-label" style="margin-bottom: 4px">Бонус за финал</div>
+                        <strong style="font-family: var(--font-dot); font-size: 20px; color: var(--accent-yellow)" id="courseModalBonus">+200 XP</strong>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" id="courseModalClose">Продолжить</button>
+                    <button class="btn btn-primary" id="courseModalProfile">В профиль</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-backdrop" id="achModal">
+            <div class="modal-card ach-modal-card">
+                <div class="panel-head">
+                    <div class="section-eyebrow"><span class="eyebrow-dot yellow"></span>ВСЕ ДОСТИЖЕНИЯ</div>
+                    <span class="stage-pills" id="achModalCounter">0 / 12</span>
+                </div>
+                <div class="ach-modal-grid" id="achModalGrid"></div>
+                <div class="modal-actions">
+                    <button class="btn btn-primary btn-sm" id="achModalClose">Закрыть</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="lock-hint" id="lockHint"></div>
 
         <div class="toast" id="toast"></div>
 
@@ -2815,6 +3571,175 @@
                 return Math.max(1, Math.round(lesson.xp / lesson.stages.length));
             }
 
+            const DAILY_BOOST_LIMIT = 100;
+            const FREEZE_COST = 250;
+            const MAX_FREEZES = 3;
+
+            const ACCENT_THEMES = [
+                { id: 'default', name: 'Nothing', minLvl: 1, c1: '#D71921', c2: '#EAB308' },
+                { id: 'amber', name: 'Янтарь', minLvl: 3, c1: '#EA580C', c2: '#F59E0B' },
+                { id: 'mint', name: 'Мята', minLvl: 5, c1: '#059669', c2: '#34D399' },
+                { id: 'mono', name: 'Монохром', minLvl: 8, c1: '#EFEFF1', c2: '#71717A' },
+            ];
+
+            const SOUND_PROFILES = [
+                { id: 'pop', name: 'Pop', minLvl: 1 },
+                { id: 'click', name: 'Клик', minLvl: 2 },
+                { id: 'thock', name: 'Thock', minLvl: 4 },
+                { id: 'typewriter', name: 'Машинка', minLvl: 6 },
+            ];
+
+            const ACHIEVEMENTS_CATALOG = [
+                { id: 'first_step', name: 'Первый шаг', desc: 'Завершить первый этап любого урока', xp: 30, progress: (p) => `${Math.min(1, p.completedStages.length)} / 1` },
+                { id: 'module_clear', name: 'Фундамент', desc: 'Закрыть любой модуль полностью', xp: 50, progress: (p) => (hasAnyModDone(p) ? '1 / 1' : '0 / 1') },
+                { id: 'sniper', name: 'Снайпер', desc: '3 этапа или спринта подряд со 100% точностью', xp: 75, progress: (p) => `${Math.min(3, p.perfectStreak || 0)} / 3` },
+                { id: 'clean_sheet', name: 'Чистый лист', desc: 'Пройти тренировку ошибок без единой помарки', xp: 60, progress: () => '0 / 1' },
+                { id: 'pace_200', name: 'Уверенный темп', desc: 'Набрать 200+ букв/мин в любом режиме', xp: 50, progress: (p) => `${Math.min(200, Math.round(p.stats.bestCpm))} / 200` },
+                { id: 'supersonic', name: 'Сверхзвук', desc: 'Набрать 300+ букв/мин в спринте', xp: 100, progress: (p) => `${Math.min(300, Math.round(p.stats.bestCpm))} / 300` },
+                { id: 'streak_3', name: 'В ритме', desc: 'Заниматься 3 дня подряд', xp: 50, progress: (p) => `${Math.min(3, getEffectiveStreak(p))} / 3 дн.` },
+                { id: 'streak_7', name: 'Неделя фокуса', desc: 'Заниматься 7 дней подряд', xp: 120, progress: (p) => `${Math.min(7, getEffectiveStreak(p))} / 7 дн.` },
+                { id: 'chars_5k', name: 'Разминка', desc: 'Набрать 5 000 символов суммарно', xp: 50, progress: (p) => `${Math.min(5000, p.stats.totalChars).toLocaleString('ru-RU')} / 5 000` },
+                { id: 'chars_25k', name: 'Книгопечатник', desc: 'Набрать 25 000 символов суммарно', xp: 120, progress: (p) => `${Math.min(25000, p.stats.totalChars).toLocaleString('ru-RU')} / 25 000` },
+                { id: 'sprinter', name: 'Спринтер', desc: 'Завершить 10 спринтов в Аркаде', xp: 80, progress: (p) => `${Math.min(10, p.stats.sprintsCompleted || 0)} / 10` },
+                { id: 'polyglot', name: 'Полиглот', desc: 'Пройти минимум по 1 модулю в RU и Коде', xp: 75, progress: (p) => `${(hasAnyModDone(p, 'ru') ? 1 : 0) + (hasAnyModDone(p, 'code') ? 1 : 0)} / 2` },
+            ];
+
+            function hasAnyModDone(p, courseId = null) {
+                const list = courseId ? [courseId] : Object.keys(COURSES);
+                return list.some((cid) => COURSES[cid].modules.some((_, idx) => isModDone(p, cid, idx)));
+            }
+
+            function getAvailableXp(p) {
+                return Math.max(0, (p.totalXp || 0) - (p.spentXp || 0));
+            }
+
+            function getPrestigeRank(level) {
+                return Math.min(5, Math.floor((level || 1) / 5));
+            }
+
+            function daysBetweenStamps(a, b) {
+                const [ay, am, ad] = a.split('-').map(Number);
+                const [by, bm, bd] = b.split('-').map(Number);
+                return Math.round((Date.UTC(by, bm - 1, bd) - Date.UTC(ay, am - 1, ad)) / 86400000);
+            }
+
+            function applyStreakFreezeIfNeeded(p) {
+                if (!p.lastActiveDate || !p.streak) return false;
+                const diff = daysBetweenStamps(p.lastActiveDate, dateStamp());
+                if (diff <= 1) return false;
+                const missed = diff - 1;
+                if ((p.streakFreezes || 0) >= missed) {
+                    p.streakFreezes -= missed;
+                    p.lastActiveDate = dateStamp(new Date(Date.now() - 86400000));
+                    persistProgress();
+                    showToast(`Заморозка спасла серию (${p.streak} дн.)!`);
+                    return true;
+                }
+                return false;
+            }
+
+            function checkAchievements({ type, cpm, acc, errors }) {
+                const p = getActiveProgress();
+                if (!Array.isArray(p.achievements)) p.achievements = [];
+
+                if (acc === 100 && errors === 0) p.perfectStreak = (p.perfectStreak || 0) + 1;
+                else p.perfectStreak = 0;
+
+                const rules = {
+                    first_step: p.completedStages.length >= 1,
+                    module_clear: hasAnyModDone(p),
+                    sniper: p.perfectStreak >= 3,
+                    clean_sheet: type === 'mistakes' && errors === 0,
+                    pace_200: cpm >= 200 || p.stats.bestCpm >= 200,
+                    supersonic: type === 'sprint' && cpm >= 300,
+                    streak_3: getEffectiveStreak(p) >= 3,
+                    streak_7: getEffectiveStreak(p) >= 7,
+                    chars_5k: p.stats.totalChars >= 5000,
+                    chars_25k: p.stats.totalChars >= 25000,
+                    sprinter: (p.stats.sprintsCompleted || 0) >= 10,
+                    polyglot: hasAnyModDone(p, 'ru') && hasAnyModDone(p, 'code'),
+                };
+
+                let unlockedAny = false;
+                ACHIEVEMENTS_CATALOG.forEach((a) => {
+                    if (rules[a.id] && !p.achievements.includes(a.id)) {
+                        p.achievements.push(a.id);
+                        grantFlatXp(a.xp);
+                        showToast(`Достижение «${a.name}» (+${a.xp} XP)`);
+                        unlockedAny = true;
+                    }
+                });
+
+                if (unlockedAny) {
+                    persistProgress();
+                    syncHeaderProfileUI();
+                }
+            }
+
+            const TITLES_CATALOG = [
+                { id: 'novice', name: 'Новичок', req: 'Стартовый титул', tier: 'base', check: () => true },
+                { id: 'ru-m1', name: 'Опора', req: 'RU · Модуль 01', tier: 'mod', check: (p) => isModDone(p, 'ru', 0) },
+                { id: 'ru-m2', name: 'Горизонт', req: 'RU · Модуль 02', tier: 'mod', check: (p) => isModDone(p, 'ru', 1) },
+                { id: 'ru-m3', name: 'Алфавит', req: 'RU · Модуль 03', tier: 'mod', check: (p) => isModDone(p, 'ru', 2) },
+                { id: 'ru-m4', name: 'Ритм', req: 'RU · Модуль 04', tier: 'mod', check: (p) => isModDone(p, 'ru', 3) },
+                { id: 'ru-m5', name: 'Точность', req: 'RU · Модуль 05', tier: 'mod', check: (p) => isModDone(p, 'ru', 4) },
+                { id: 'ru-m6', name: 'Марафонец', req: 'RU · Модуль 06', tier: 'mod', check: (p) => isModDone(p, 'ru', 5) },
+                { id: 'code-m1', name: 'Кодер', req: 'CODE · Модуль 01', tier: 'mod', check: (p) => isModDone(p, 'code', 0) },
+                { id: 'code-m2', name: 'Структура', req: 'CODE · Модуль 02', tier: 'mod', check: (p) => isModDone(p, 'code', 1) },
+                { id: 'code-m3', name: 'Логик', req: 'CODE · Модуль 03', tier: 'mod', check: (p) => isModDone(p, 'code', 2) },
+                { id: 'code-m4', name: 'Синтаксис', req: 'CODE · Модуль 04', tier: 'mod', check: (p) => isModDone(p, 'code', 3) },
+                { id: 'code-m5', name: 'Инженер', req: 'CODE · Модуль 05', tier: 'mod', check: (p) => isModDone(p, 'code', 4) },
+                { id: 'master-ru', name: 'Мастер слепой печати', req: 'Весь курс RU', tier: 'master', check: (p) => isCourseDone(p, 'ru') },
+                { id: 'master-code', name: 'Мастер синтаксиса', req: 'Весь курс CODE', tier: 'master', check: (p) => isCourseDone(p, 'code') },
+                { id: 'legend', name: 'Архитектор клавиатуры', req: 'Оба курса на 100%', tier: 'legend', check: (p) => isCourseDone(p, 'ru') && isCourseDone(p, 'code') },
+            ];
+
+            function isModDone(p, courseId, modIdx) {
+                const mod = COURSES[courseId]?.modules[modIdx];
+                return mod ? mod.lessons.every((l) => p.completedLessons.includes(l.id)) : false;
+            }
+
+            function isCourseDone(p, courseId) {
+                return getFlatLessonIds(courseId).every((id) => p.completedLessons.includes(id));
+            }
+
+            function getLevelInfo(totalXp) {
+                let level = 1;
+                let left = Math.max(0, totalXp || 0);
+                while (left >= 100 + (level - 1) * 50) {
+                    left -= 100 + (level - 1) * 50;
+                    level++;
+                }
+                const need = 100 + (level - 1) * 50;
+                return { level, current: left, need, pct: Math.min(100, Math.round((left / need) * 100)) };
+            }
+
+            function getActiveTitleObj(p) {
+                const unlocked = TITLES_CATALOG.filter((t) => t.check(p));
+                if (p.selectedTitle) {
+                    const picked = unlocked.find((t) => t.id === p.selectedTitle);
+                    if (picked) return picked;
+                }
+                return unlocked[unlocked.length - 1] || TITLES_CATALOG[0];
+            }
+
+            function grantXp(baseXp) {
+                const p = getActiveProgress();
+                const remain = Math.max(0, DAILY_BOOST_LIMIT - (p.dailyBoostUsed || 0));
+                const bonusXp = Math.min(baseXp, remain);
+                const totalAdded = baseXp + bonusXp;
+                p.dailyBoostUsed = (p.dailyBoostUsed || 0) + bonusXp;
+                p.dailyXp = (p.dailyXp || 0) + totalAdded;
+                p.totalXp = (p.totalXp || 0) + totalAdded;
+                return { baseXp, bonusXp, totalAdded };
+            }
+
+            function grantFlatXp(amount) {
+                const p = getActiveProgress();
+                p.totalXp = (p.totalXp || 0) + amount;
+                return amount;
+            }
+
             // ================= 3. ХРАНИЛИЩЕ АККАУНТОВ, НАСТРОЕК И ПРОГРЕССА =================
             const KEY_GLOBAL = 'duoglash_global_v4';
             const KEY_GUEST = 'duoglash_guest_v4';
@@ -2829,12 +3754,21 @@
                     completedLessons: [],
                     completedStages: [],
                     dailyXp: 0,
+                    dailyBoostUsed: 0,
+                    streak: 0,
+                    lastActiveDate: null,
+                    celebratedCourses: [],
+                    selectedTitle: null,
                     dailyDate: dateStamp(),
                     totalXp: 0,
                     keyErrors: {},
                     history: [],
                     activity: {},
-                    stats: { bestCpm: 0, bestWpm: 0, totalChars: 0, totalErrors: 0, sessions: 0 },
+                    stats: { bestCpm: 0, bestWpm: 0, totalChars: 0, totalErrors: 0, sessions: 0, sprintsCompleted: 0 },
+                    spentXp: 0,
+                    streakFreezes: 0,
+                    achievements: [],
+                    perfectStreak: 0,
                 };
             }
 
@@ -2879,6 +3813,10 @@
                 ghostCaret: false,
                 fontSize: 'md',
                 caretStyle: 'line',
+                analyticsPeriod: 14,
+                chartType: 'line',
+                accentTheme: 'default',
+                soundProfile: 'pop',
             };
 
             const globalSettings = { ...DEFAULT_SETTINGS, ...readJSON(KEY_GLOBAL, {}) };
@@ -2889,6 +3827,7 @@
             if (!['sm', 'md', 'lg'].includes(globalSettings.fontSize)) globalSettings.fontSize = 'md';
             if (!['line', 'block', 'underline'].includes(globalSettings.caretStyle)) globalSettings.caretStyle = 'line';
             if (typeof globalSettings.volume !== 'number' || Number.isNaN(globalSettings.volume)) globalSettings.volume = 65;
+            if (globalSettings.chartType !== 'line' && globalSettings.chartType !== 'bar') globalSettings.chartType = 'line';
 
             function normalizeProgress(p) {
                 const rawStats = p?.stats || {};
@@ -2923,7 +3862,7 @@
                     });
                 }
 
-                const history = Array.isArray(p?.history) ? p.history.filter((h) => h && typeof h.cpm === 'number' && typeof h.acc === 'number').slice(-30) : [];
+                const history = Array.isArray(p?.history) ? p.history.filter((h) => h && typeof h.cpm === 'number' && typeof h.acc === 'number').slice(-200) : [];
 
                 const activity = {};
                 if (p?.activity && typeof p.activity === 'object') {
@@ -2947,12 +3886,23 @@
                         totalChars: Math.max(0, rawStats.totalChars || 0),
                         totalErrors: Math.max(0, rawStats.totalErrors || 0),
                         sessions: Math.max(0, rawStats.sessions || 0),
+                        sprintsCompleted: Math.max(0, rawStats.sprintsCompleted || 0),
                     },
+                    dailyBoostUsed: typeof p?.dailyBoostUsed === 'number' ? Math.max(0, p.dailyBoostUsed) : 0,
+                    streak: typeof p?.streak === 'number' ? Math.max(0, p.streak) : 0,
+                    lastActiveDate: typeof p?.lastActiveDate === 'string' ? p.lastActiveDate : null,
+                    celebratedCourses: Array.isArray(p?.celebratedCourses) ? p.celebratedCourses : [],
+                    selectedTitle: typeof p?.selectedTitle === 'string' ? p.selectedTitle : null,
+                    spentXp: typeof p?.spentXp === 'number' ? Math.max(0, p.spentXp) : 0,
+                    streakFreezes: typeof p?.streakFreezes === 'number' ? Math.max(0, Math.min(MAX_FREEZES, p.streakFreezes)) : 0,
+                    achievements: Array.isArray(p?.achievements) ? p.achievements.filter((x) => typeof x === 'string') : [],
+                    perfectStreak: typeof p?.perfectStreak === 'number' ? Math.max(0, p.perfectStreak) : 0,
                 };
 
                 if (merged.dailyDate !== dateStamp()) {
                     merged.dailyXp = 0;
                     merged.dailyDate = dateStamp();
+                    merged.dailyBoostUsed = 0;
                 }
                 return merged;
             }
@@ -3011,6 +3961,27 @@
                 clearTimeout(toastTimer);
                 toastTimer = setTimeout(() => toastEl.classList.remove('visible'), 2800);
             }
+            const lockHintEl = document.getElementById('lockHint');
+            let lockHintTimer = null;
+
+            function showLockHint(anchorEl, text) {
+                lockHintEl.textContent = text;
+                lockHintEl.classList.add('visible');
+
+                const rect = anchorEl.getBoundingClientRect();
+                const hw = lockHintEl.offsetWidth;
+                const hh = lockHintEl.offsetHeight;
+                const left = Math.max(10, Math.min(window.innerWidth - hw - 10, rect.left + rect.width / 2 - hw / 2));
+                const top = rect.top - hh - 8 >= 10 ? rect.top - hh - 8 : rect.bottom + 8;
+
+                lockHintEl.style.left = `${left}px`;
+                lockHintEl.style.top = `${top}px`;
+
+                clearTimeout(lockHintTimer);
+                lockHintTimer = setTimeout(() => lockHintEl.classList.remove('visible'), 2600);
+            }
+
+            document.addEventListener('scroll', () => lockHintEl.classList.remove('visible'), true);
 
             // ================= 4. ЗВУК КЛАВИШ И UI-КНОПОК =================
             let audioCtx = null;
@@ -3021,42 +3992,149 @@
                 return audioCtx;
             }
 
-            function playPop(isError = false) {
+            let noiseBuffer = null;
+
+            function getNoiseBuffer(ctx) {
+                if (noiseBuffer) return noiseBuffer;
+                const len = Math.floor(ctx.sampleRate * 0.045);
+                noiseBuffer = ctx.createBuffer(1, len, ctx.sampleRate);
+                const data = noiseBuffer.getChannelData(0);
+                for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (len * 0.28));
+                return noiseBuffer;
+            }
+
+            function getActiveSoundProfile() {
+                const lvl = getLevelInfo(getActiveProgress().totalXp).level;
+                const prof = SOUND_PROFILES.find((s) => s.id === globalSettings.soundProfile);
+                return prof && lvl >= prof.minLvl ? prof.id : 'pop';
+            }
+
+            function playPop(isError = false, overrideProfile = null) {
                 const volRatio = globalSettings.muted ? 0 : globalSettings.volume / 100;
                 if (volRatio <= 0.001) return;
 
                 const ctx = getAudioCtx();
                 const now = ctx.currentTime;
+                const profile = overrideProfile || getActiveSoundProfile();
+                const jitter = 0.94 + Math.random() * 0.12;
+
+                if (isError) {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    const filter = ctx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(340, now);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(150 * jitter, now);
+                    osc.frequency.exponentialRampToValueAtTime(55, now + 0.055);
+                    gain.gain.setValueAtTime(0.001, now);
+                    gain.gain.linearRampToValueAtTime(0.42 * volRatio, now + 0.004);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
+                    osc.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.06);
+                    return;
+                }
+
+                if (profile === 'click') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(1450 * jitter, now);
+                    osc.frequency.exponentialRampToValueAtTime(420, now + 0.014);
+                    gain.gain.setValueAtTime(0.001, now);
+                    gain.gain.linearRampToValueAtTime(0.32 * volRatio, now + 0.0015);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.016);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.02);
+                    return;
+                }
+
+                if (profile === 'thock') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    const filter = ctx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(520, now);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(195 * jitter, now);
+                    osc.frequency.exponentialRampToValueAtTime(58, now + 0.048);
+                    gain.gain.setValueAtTime(0.001, now);
+                    gain.gain.linearRampToValueAtTime(0.68 * volRatio, now + 0.003);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.052);
+                    osc.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.058);
+
+                    const src = ctx.createBufferSource();
+                    src.buffer = getNoiseBuffer(ctx);
+                    const nf = ctx.createBiquadFilter();
+                    nf.type = 'bandpass';
+                    nf.frequency.setValueAtTime(750, now);
+                    const ng = ctx.createGain();
+                    ng.gain.setValueAtTime(0.22 * volRatio, now);
+                    ng.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+                    src.connect(nf);
+                    nf.connect(ng);
+                    ng.connect(ctx.destination);
+                    src.start(now);
+                    src.stop(now + 0.025);
+                    return;
+                }
+
+                if (profile === 'typewriter') {
+                    const src = ctx.createBufferSource();
+                    src.buffer = getNoiseBuffer(ctx);
+                    const nf = ctx.createBiquadFilter();
+                    nf.type = 'highpass';
+                    nf.frequency.setValueAtTime(1600, now);
+                    const ng = ctx.createGain();
+                    ng.gain.setValueAtTime(0.38 * volRatio, now);
+                    ng.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+                    src.connect(nf);
+                    nf.connect(ng);
+                    ng.connect(ctx.destination);
+                    src.start(now);
+                    src.stop(now + 0.035);
+
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(920 * jitter, now);
+                    osc.frequency.exponentialRampToValueAtTime(240, now + 0.018);
+                    gain.gain.setValueAtTime(0.001, now);
+                    gain.gain.linearRampToValueAtTime(0.16 * volRatio, now + 0.0015);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.024);
+                    return;
+                }
+
+                // По умолчанию: мягкий Pop
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 const filter = ctx.createBiquadFilter();
-
                 filter.type = 'lowpass';
-                filter.frequency.setValueAtTime(isError ? 360 : 940, now);
-
-                const jitter = 0.93 + Math.random() * 0.14;
-                const peakGain = (isError ? 0.42 : 0.55) * volRatio;
-
+                filter.frequency.setValueAtTime(940, now);
                 osc.type = 'sine';
-                if (isError) {
-                    osc.frequency.setValueAtTime(155 * jitter, now);
-                    osc.frequency.exponentialRampToValueAtTime(58, now + 0.055);
-                    gain.gain.setValueAtTime(0.001, now);
-                    gain.gain.linearRampToValueAtTime(peakGain, now + 0.004);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
-                } else {
-                    osc.frequency.setValueAtTime(320 * jitter, now);
-                    osc.frequency.exponentialRampToValueAtTime(92, now + 0.038);
-                    gain.gain.setValueAtTime(0.001, now);
-                    gain.gain.linearRampToValueAtTime(peakGain, now + 0.003);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-                }
-
+                osc.frequency.setValueAtTime(320 * jitter, now);
+                osc.frequency.exponentialRampToValueAtTime(92, now + 0.038);
+                gain.gain.setValueAtTime(0.001, now);
+                gain.gain.linearRampToValueAtTime(0.55 * volRatio, now + 0.003);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
                 osc.connect(filter);
                 filter.connect(gain);
                 gain.connect(ctx.destination);
                 osc.start(now);
-                osc.stop(now + 0.06);
+                osc.stop(now + 0.05);
             }
 
             function playUiClick() {
@@ -3093,7 +4171,7 @@
             document.addEventListener('click', (e) => {
                 const target = e.target.closest('button, .brand');
                 if (!target) return;
-                if (target.disabled || target.classList.contains('locked')) return;
+                if (target.disabled || target.classList.contains('locked') || target.classList.contains('locked-opt') || target.classList.contains('btn-locked') || target.classList.contains('locked-step')) return;
                 if (target.id === 'muteBtn') return;
                 if (target.classList.contains('stage-step') && !target.classList.contains('clickable')) return;
                 playUiClick();
@@ -3136,14 +4214,29 @@
             });
 
             // ================= 5. КАСТОМИЗАЦИЯ ИНТЕРФЕЙСА =================
+            function getActiveThemeId() {
+                const lvl = getLevelInfo(getActiveProgress().totalXp).level;
+                const th = ACCENT_THEMES.find((t) => t.id === globalSettings.accentTheme);
+                return th && lvl >= th.minLvl ? th.id : 'default';
+            }
+
             function applyAppearanceSettings() {
+                const themeId = getActiveThemeId();
                 document.body.dataset.fontSize = globalSettings.fontSize;
                 document.body.dataset.caret = globalSettings.caretStyle;
+                document.body.dataset.theme = themeId;
+
                 document.querySelectorAll('#fontSizeSeg button').forEach((b) => b.classList.toggle('active', b.dataset.size === globalSettings.fontSize));
                 document.querySelectorAll('#caretStyleSeg button').forEach((b) => b.classList.toggle('active', b.dataset.caret === globalSettings.caretStyle));
                 document.getElementById('kbdToggleBtn').classList.toggle('on', !!globalSettings.showKeyboard);
                 document.getElementById('ghostToggleBtn').classList.toggle('on', !!globalSettings.ghostCaret);
                 document.getElementById('visualKbd').classList.toggle('visible', !!globalSettings.showKeyboard);
+
+                const pxMap = { sm: '20 px', md: '24 px', lg: '28 px' };
+                const caretMap = { line: 'Линия', block: 'Блок', underline: 'Черта' };
+                const thName = (ACCENT_THEMES.find((t) => t.id === themeId) || ACCENT_THEMES[0]).name;
+                const meta = document.getElementById('previewMeta');
+                if (meta) meta.textContent = `${pxMap[globalSettings.fontSize]} · ${caretMap[globalSettings.caretStyle]} · ${thName}`;
             }
 
             document.querySelectorAll('#fontSizeSeg button').forEach((btn) => {
@@ -3185,16 +4278,22 @@
 
             function syncHeaderProfileUI(activeScreenName = null) {
                 const user = getCurrentUserRecord();
+                const prestigeEl = document.getElementById('headerPrestige');
+
                 if (user) {
+                    const lvl = getLevelInfo(user.progress.totalXp).level;
+                    const rank = getPrestigeRank(lvl);
                     profileHeaderBtn.classList.add('logged-in');
-                    profileHeaderBtn.title = `Профиль: ${user.username}`;
+                    profileHeaderBtn.title = rank > 0 ? `Профиль: ${user.username} · LVL ${lvl} (Престиж ${rank})` : `Профиль: ${user.username} · LVL ${lvl}`;
                     headerAvatar.textContent = getMonogram(user.username);
                     headerNick.textContent = user.username;
+                    prestigeEl.innerHTML = Array.from({ length: rank }, (_, i) => `<span class="prestige-dot${i >= 2 ? ' hi' : ''}"></span>`).join('');
                 } else {
                     profileHeaderBtn.classList.remove('logged-in');
                     profileHeaderBtn.title = 'Войти или зарегистрироваться';
                     headerAvatar.innerHTML = ICONS.user;
                     headerNick.textContent = 'Войти';
+                    prestigeEl.innerHTML = '';
                 }
                 profileHeaderBtn.classList.toggle('active-screen', activeScreenName === 'profile' || activeScreenName === 'auth');
             }
@@ -3463,65 +4562,307 @@
                 startMistakesPractice(heatmapLang, weakChars);
             });
 
+            function filterHistoryByPeriod(history, days) {
+                if (!days || days <= 0) return history;
+                const cutoff = dateStamp(new Date(Date.now() - (days - 1) * 86400000));
+                return history.filter((item) => !item.date || item.date >= cutoff);
+            }
+
             function renderDynamicsChart(progress) {
                 const box = document.getElementById('chartBox');
-                const list = (progress.history || []).slice(-20);
+                const days = globalSettings.analyticsPeriod ?? 14;
+                const type = globalSettings.chartType || 'line';
+                const list = filterHistoryByPeriod(progress.history || [], days).slice(-40);
+
                 if (list.length < 2) {
-                    box.innerHTML = `<span class="chart-empty">Завершите минимум 2 этапа или спринта для построения графика</span>`;
+                    box.innerHTML = `<span class="chart-empty">Недостаточно сессий за выбранный период (нужно от 2)</span>`;
                     return;
                 }
 
-                const w = 360,
-                    h = 96,
-                    padX = 14,
-                    padY = 14;
+                const w = Math.max(240, Math.round((box.clientWidth || 360) - 16));
+                const h = Math.max(88, Math.round((box.clientHeight || 118) - 16));
+                const padX = 14,
+                    padY = 12;
                 const maxCpm = Math.max(...list.map((x) => x.cpm), 60);
-                const minCpm = Math.max(0, Math.min(...list.map((x) => x.cpm)) - 20);
+                const minCpm = type === 'bar' ? 0 : Math.max(0, Math.min(...list.map((x) => x.cpm)) - 20);
                 const span = Math.max(20, maxCpm - minCpm);
+
+                if (type === 'bar') {
+                    const maxAreaW = w - padX * 2;
+                    const bw = Math.min(26, Math.max(6, Math.floor(maxAreaW / list.length)));
+                    const groupW = list.length * bw;
+                    const startX = (w - groupW) / 2;
+
+                    const bars = list
+                        .map((item, i) => {
+                            const bh = Math.max(5, ((item.cpm - minCpm) / span) * (h - padY * 2));
+                            const x = startX + i * bw;
+                            const y = h - padY - bh;
+                            const fill = item.cpm === maxCpm ? 'var(--accent-yellow)' : '#6E727D';
+                            return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" fill="${fill}" stroke="var(--bg)" stroke-width="1"><title>${item.date || ''} · ${item.cpm} букв/мин · ${item.acc}%</title></rect>`;
+                        })
+                        .join('');
+
+                    box.innerHTML = `
+          <svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="display:block; max-width:100%;">
+            <line x1="${padX}" y1="${h - padY}" x2="${w - padX}" y2="${h - padY}" stroke="#222429" />
+            ${bars}
+          </svg>`;
+                    return;
+                }
 
                 const pts = list.map((item, i) => {
                     const x = padX + (i / (list.length - 1)) * (w - padX * 2);
                     const y = h - padY - ((item.cpm - minCpm) / span) * (h - padY * 2);
                     return { x, y, item };
                 });
-
                 const pathD = pts.map((pt, i) => `${i === 0 ? 'M' : 'L'}${pt.x.toFixed(1)},${pt.y.toFixed(1)}`).join(' ');
-                const circles = pts.map((pt) => `<circle cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="3" fill="#EAB308"><title>${pt.item.cpm} букв/мин · ${pt.item.acc}%</title></circle>`).join('');
+                const areaD = `${pathD} L${pts[pts.length - 1].x.toFixed(1)},${h - padY} L${pts[0].x.toFixed(1)},${h - padY} Z`;
+                const circles = pts.map((pt) => `<circle cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="3.2" fill="var(--accent-yellow)"><title>${pt.item.date || ''} · ${pt.item.cpm} букв/мин · ${pt.item.acc}%</title></circle>`).join('');
 
                 box.innerHTML = `
-        <svg width="100%" height="100%" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+        <svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="display:block; max-width:100%;">
           <line x1="${padX}" y1="${padY}" x2="${w - padX}" y2="${padY}" stroke="#222429" stroke-dasharray="3 3" />
           <line x1="${padX}" y1="${h - padY}" x2="${w - padX}" y2="${h - padY}" stroke="#222429" />
+          ${type === 'area' ? `<path d="${areaD}" fill="var(--accent-yellow)" fill-opacity="0.14" />` : ''}
           <path d="${pathD}" fill="none" stroke="#EFEFF1" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" />
           ${circles}
-        </svg>
-      `;
+        </svg>`;
+            }
+
+            let chartResizeTimer = null;
+            window.addEventListener('resize', () => {
+                if (!screens.profile.classList.contains('active')) return;
+                clearTimeout(chartResizeTimer);
+                chartResizeTimer = setTimeout(() => renderDynamicsChart(getActiveProgress()), 100);
+            });
+
+            const achModal = document.getElementById('achModal');
+
+            function renderAchievementsModal(p) {
+                const grid = document.getElementById('achModalGrid');
+                const doneIds = p.achievements || [];
+                grid.innerHTML = '';
+
+                ACHIEVEMENTS_CATALOG.forEach((a) => {
+                    const isDone = doneIds.includes(a.id);
+                    const card = document.createElement('div');
+                    card.className = 'ach-card' + (isDone ? ' done' : '');
+                    card.innerHTML = `
+                      <div>
+                        <div class="ach-top">
+                          <span class="ach-name">${a.name}</span>
+                          <span class="ach-xp">+${a.xp} XP</span>
+                        </div>
+                        <p class="ach-desc" style="margin-top:5px;">${a.desc}</p>
+                      </div>
+                      <span class="ach-status">${isDone ? 'Выполнено' : `Прогресс: ${a.progress(p)}`}</span>
+                    `;
+                    grid.appendChild(card);
+                });
+                document.getElementById('achModalCounter').textContent = `${doneIds.length} / ${ACHIEVEMENTS_CATALOG.length}`;
+            }
+
+            function renderAchievementsAndFreeze(p) {
+                const doneIds = p.achievements || [];
+                const totalAchXp = ACHIEVEMENTS_CATALOG.reduce((s, a) => s + a.xp, 0);
+                const earnedAchXp = ACHIEVEMENTS_CATALOG.filter((a) => doneIds.includes(a.id)).reduce((s, a) => s + a.xp, 0);
+
+                document.getElementById('achCounter').textContent = `${doneIds.length} / ${ACHIEVEMENTS_CATALOG.length}`;
+                document.getElementById('achDoneSummary').textContent = `${doneIds.length} открыто`;
+                document.getElementById('achEarnedXp').textContent = `${earnedAchXp} / ${totalAchXp} XP`;
+                document.getElementById('achProgressBar').style.width = `${Math.round((doneIds.length / ACHIEVEMENTS_CATALOG.length) * 100)}%`;
+
+                const freezes = p.streakFreezes || 0;
+                const bal = getAvailableXp(p);
+                document.getElementById('freezeCountVal').textContent = `${freezes} шт.`;
+                document.getElementById('xpBalanceVal').textContent = `Баланс: ${bal} XP`;
+
+                const buyBtn = document.getElementById('buyFreezeBtn');
+                const canBuy = freezes < MAX_FREEZES && bal >= FREEZE_COST;
+                buyBtn.disabled = !canBuy;
+                buyBtn.style.opacity = canBuy ? '1' : '0.45';
+                buyBtn.textContent = freezes >= MAX_FREEZES ? 'Максимум в запасе' : `Купить за ${FREEZE_COST} XP`;
+            }
+
+            document.getElementById('openAchModalBtn').addEventListener('click', () => {
+                renderAchievementsModal(getActiveProgress());
+                achModal.classList.add('visible');
+            });
+            document.getElementById('achModalClose').addEventListener('click', () => achModal.classList.remove('visible'));
+            achModal.addEventListener('click', (e) => {
+                if (e.target === achModal) achModal.classList.remove('visible');
+            });
+
+            document.getElementById('buyFreezeBtn').addEventListener('click', () => {
+                const p = getActiveProgress();
+                if ((p.streakFreezes || 0) >= MAX_FREEZES || getAvailableXp(p) < FREEZE_COST) return;
+                p.spentXp = (p.spentXp || 0) + FREEZE_COST;
+                p.streakFreezes = (p.streakFreezes || 0) + 1;
+                persistProgress();
+                renderDailyGoal();
+                renderAchievementsAndFreeze(p);
+                showToast('Куплена 1 заморозка серии');
+            });
+
+            function renderCustomizationUnlockables(p) {
+                const lvl = getLevelInfo(p.totalXp).level;
+                const activeTheme = getActiveThemeId();
+                const activeSound = getActiveSoundProfile();
+
+                const themeSeg = document.getElementById('themeSeg');
+                themeSeg.innerHTML = '';
+                ACCENT_THEMES.forEach((t) => {
+                    const unlocked = lvl >= t.minLvl;
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = (activeTheme === t.id ? 'active ' : '') + (unlocked ? '' : 'locked-opt');
+                    btn.innerHTML = `<span class="swatch-pair">` + `<span class="swatch-dot" style="background:${t.c1}"></span>` + `<span class="swatch-dot" style="background:${t.c2}"></span>` + `</span>` + `<span>${t.name}</span>` + (unlocked ? '' : `<span class="lvl-tag">L${t.minLvl}</span>`);
+
+                    if (unlocked) {
+                        btn.addEventListener('click', () => {
+                            globalSettings.accentTheme = t.id;
+                            persistGlobal();
+                            applyAppearanceSettings();
+                            renderCustomizationUnlockables(p);
+                            renderDynamicsChart(p);
+                        });
+                    } else {
+                        btn.setAttribute('aria-disabled', 'true');
+                        btn.addEventListener('click', () => {
+                            showLockHint(btn, `Откроется на LVL ${String(t.minLvl).padStart(2, '0')} (сейчас LVL ${String(lvl).padStart(2, '0')})`);
+                        });
+                    }
+
+                    themeSeg.appendChild(btn);
+                });
+
+                const soundSeg = document.getElementById('soundSeg');
+                soundSeg.innerHTML = '';
+                SOUND_PROFILES.forEach((s) => {
+                    const unlocked = lvl >= s.minLvl;
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = (activeSound === s.id ? 'active ' : '') + (unlocked ? '' : 'locked-opt');
+                    btn.innerHTML = `<span>${s.name}</span>${unlocked ? '' : `<span class="lvl-tag">L${s.minLvl}</span>`}`;
+
+                    if (unlocked) {
+                        btn.addEventListener('click', () => {
+                            globalSettings.soundProfile = s.id;
+                            persistGlobal();
+                            renderCustomizationUnlockables(p);
+                            playPop(false, s.id);
+                        });
+                    } else {
+                        btn.setAttribute('aria-disabled', 'true');
+                        btn.addEventListener('click', () => {
+                            showLockHint(btn, `Откроется на LVL ${String(s.minLvl).padStart(2, '0')} (сейчас LVL ${String(lvl).padStart(2, '0')})`);
+                        });
+                    }
+
+                    soundSeg.appendChild(btn);
+                });
             }
 
             function renderActivityMatrix(progress) {
                 const grid = document.getElementById('activityMatrix');
                 grid.innerHTML = '';
                 const act = progress.activity || {};
-                let activeDays = 0;
+                const sel = globalSettings.analyticsPeriod ?? 14;
+                const totalDays = sel === 0 ? 84 : sel;
 
-                for (let i = 41; i >= 0; i--) {
+                const layoutMap = {
+                    7: { cols: 7, rows: 1, gap: 6 },
+                    14: { cols: 7, rows: 2, gap: 5 },
+                    30: { cols: 10, rows: 3, gap: 4 },
+                    84: { cols: 21, rows: 4, gap: 3 },
+                };
+                const cfg = layoutMap[totalDays] || { cols: 14, rows: 6, gap: 3 };
+                const availW = Math.max(180, (grid.clientWidth || 360) - 16);
+                const availH = Math.max(60, (grid.clientHeight || 92) - 16);
+
+                const cellW = (availW - (cfg.cols - 1) * cfg.gap) / cfg.cols;
+                const cellH = (availH - (cfg.rows - 1) * cfg.gap) / cfg.rows;
+                const size = Math.max(6, Math.floor(Math.min(cellW, cellH, 44)));
+
+                grid.style.gap = `${cfg.gap}px`;
+                grid.style.gridTemplateColumns = `repeat(${cfg.cols}, ${size}px)`;
+                grid.style.gridAutoRows = `${size}px`;
+
+                let activeDays = 0;
+                for (let i = totalDays - 1; i >= 0; i--) {
                     const d = new Date();
                     d.setDate(d.getDate() - i);
                     const stamp = dateStamp(d);
                     const count = act[stamp] || 0;
                     if (count > 0) activeDays++;
-
                     const dot = document.createElement('span');
-                    dot.className = 'act-dot';
-                    if (count >= 6) dot.classList.add('a3');
-                    else if (count >= 3) dot.classList.add('a2');
-                    else if (count >= 1) dot.classList.add('a1');
+                    dot.className = 'act-dot' + (count >= 6 ? ' a3' : count >= 3 ? ' a2' : count >= 1 ? ' a1' : '');
                     dot.title = `${stamp}: ${count} трен.`;
                     grid.appendChild(dot);
                 }
-
+                document.getElementById('activityTitle').textContent = sel === 0 ? 'Активность (84 дн.)' : `Активность (${totalDays} дн.)`;
                 document.getElementById('activeDaysLabel').textContent = `${activeDays} дн.`;
             }
+
+            function renderTitles(progress) {
+                const grid = document.getElementById('titlesGrid');
+                const active = getActiveTitleObj(progress);
+                let unlockedCount = 0;
+                grid.innerHTML = '';
+
+                TITLES_CATALOG.forEach((t) => {
+                    const isOpen = t.check(progress);
+                    if (isOpen) unlockedCount++;
+
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'title-chip' + (isOpen ? '' : ' locked') + (t.tier === 'master' || t.tier === 'legend' ? ' master' : '') + (active.id === t.id ? ' selected' : '');
+
+                    btn.innerHTML = `<span>${isOpen ? '' : ICONS.lock} ${t.name}</span><span class="title-chip-sub">${t.req}</span>`;
+
+                    if (isOpen) {
+                        btn.addEventListener('click', () => {
+                            progress.selectedTitle = t.id;
+                            persistProgress();
+                            openProfileScreen();
+                            showToast(`Титул «${t.name}» установлен`);
+                        });
+                    } else {
+                        btn.setAttribute('aria-disabled', 'true');
+                        btn.addEventListener('click', () => {
+                            showLockHint(btn, `Откроется за: ${t.req}`);
+                        });
+                    }
+
+                    grid.appendChild(btn);
+                });
+
+                document.getElementById('titlesCounter').textContent = `${unlockedCount} / ${TITLES_CATALOG.length} открыто`;
+                const badge = document.getElementById('profileTitleBadge');
+                badge.textContent = active.name;
+                badge.className = 'title-badge' + (active.tier === 'master' ? ' master' : active.tier === 'legend' ? ' legend' : '');
+            }
+
+            document.querySelectorAll('#periodSeg button').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    globalSettings.analyticsPeriod = Number(btn.dataset.days);
+                    persistGlobal();
+                    document.querySelectorAll('#periodSeg button').forEach((b) => b.classList.toggle('active', b === btn));
+                    const p = getActiveProgress();
+                    renderDynamicsChart(p);
+                    renderActivityMatrix(p);
+                });
+            });
+
+            document.querySelectorAll('#chartTypeSeg button').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    globalSettings.chartType = btn.dataset.chart;
+                    persistGlobal();
+                    document.querySelectorAll('#chartTypeSeg button').forEach((b) => b.classList.toggle('active', b === btn));
+                    renderDynamicsChart(getActiveProgress());
+                });
+            });
 
             // Экспорт / импорт JSON-бэкапа
             document.getElementById('exportBackupBtn').innerHTML = `${ICONS.download}<span>Экспорт JSON</span>`;
@@ -3632,11 +4973,20 @@
                 document.getElementById('progCodeText').textContent = `${codeDone} / ${codeIds.length} уроков`;
                 document.getElementById('progCodeBar').style.width = `${Math.round((codeDone / codeIds.length) * 100)}%`;
 
+                const lvl = getLevelInfo(p.totalXp);
+                document.getElementById('profileLevel').textContent = `LVL ${String(lvl.level).padStart(2, '0')}`;
+                document.getElementById('profileLevelBar').style.width = `${lvl.pct}%`;
+                document.getElementById('profileNextLvl').textContent = `${lvl.current} / ${lvl.need} до LVL ${String(lvl.level + 1).padStart(2, '0')}`;
+                document.querySelectorAll('#periodSeg button').forEach((b) => b.classList.toggle('active', Number(b.dataset.days) === (globalSettings.analyticsPeriod ?? 14)));
+                document.querySelectorAll('#chartTypeSeg button').forEach((b) => b.classList.toggle('active', b.dataset.chart === (globalSettings.chartType || 'line')));
+                showScreen('profile');
                 renderHeatmap(p);
                 renderDynamicsChart(p);
                 renderActivityMatrix(p);
+                renderTitles(p);
+                renderAchievementsAndFreeze(p);
+                renderCustomizationUnlockables(p);
                 applyAppearanceSettings();
-                showScreen('profile');
             }
 
             document.getElementById('profileBackBtn').addEventListener('click', () => setTopMode(currentTopMode));
@@ -3732,11 +5082,27 @@
                 document.querySelectorAll('.course-tab').forEach((t) => t.classList.toggle('active', t.dataset.course === currentCourseId));
             }
 
+            function getEffectiveStreak(p) {
+                const today = dateStamp();
+                const yest = dateStamp(new Date(Date.now() - 86400000));
+                return p.lastActiveDate === today || p.lastActiveDate === yest ? p.streak || 0 : 0;
+            }
+
             function renderDailyGoal() {
                 const p = getActiveProgress();
-                const xp = p.dailyXp;
-                dailyXpText.textContent = `${xp} / 100 XP`;
-                const filled = Math.min(10, Math.floor((xp / 100) * 10));
+                applyStreakFreezeIfNeeded(p);
+                const used = Math.min(DAILY_BOOST_LIMIT, p.dailyBoostUsed || 0);
+                const remain = DAILY_BOOST_LIMIT - used;
+
+                dailyXpText.textContent = remain > 0 ? `×2 · ${remain} XP` : 'Буст забран';
+                const statusEl = document.getElementById('boostStatusText');
+                if (statusEl) statusEl.textContent = remain > 0 ? 'Первые 100 XP дня удваиваются' : 'Обновится завтра · сейчас ×1';
+
+                const streakEl = document.getElementById('streakBadge');
+                const freezeTag = (p.streakFreezes || 0) > 0 ? ` · ❄ ${p.streakFreezes}` : '';
+                if (streakEl) streakEl.textContent = `${getEffectiveStreak(p)} дн. подряд${freezeTag}`;
+
+                const filled = Math.ceil((remain / DAILY_BOOST_LIMIT) * 10);
                 dailyMeter.innerHTML = '';
                 for (let i = 0; i < 10; i++) {
                     const span = document.createElement('span');
@@ -3786,6 +5152,10 @@
         `;
 
                     if (unlocked) card.addEventListener('click', () => openModule(idx));
+                    else {
+                        const prevMod = COURSES[currentCourseId].modules[idx - 1];
+                        card.addEventListener('click', () => showLockHint(card, `Откроется после модуля «${prevMod.title}»`));
+                    }
                     modulesGrid.appendChild(card);
                 });
             }
@@ -3841,14 +5211,20 @@
               ${!unlocked ? '<span>Откроется после завершения предыдущего урока</span>' : ''}
             </div>
           </div>
-          <button class="${btnClass}" ${!unlocked ? 'disabled' : ''}>${btnInner}</button>
+          <button class="${btnClass}">${btnInner}</button>
         `;
 
+                    const actionBtn = row.querySelector('button');
                     if (unlocked) {
-                        row.querySelector('button').addEventListener('click', () => {
+                        actionBtn.addEventListener('click', () => {
                             const startStage = done ? 0 : getFirstUncompletedStageIdx(lesson);
                             startLesson(currentCourseId, moduleIdx, lIdx, startStage);
                         });
+                    } else {
+                        const allIds = getFlatLessonIds(currentCourseId);
+                        const prevLesson = ALL_LESSONS_MAP[allIds[allIds.indexOf(lesson.id) - 1]];
+                        const hintText = prevLesson ? `Откроется после урока «${prevLesson.title}»` : 'Завершите предыдущий урок';
+                        row.addEventListener('click', () => showLockHint(actionBtn, hintText));
                     }
 
                     lessonsList.appendChild(row);
@@ -4076,13 +5452,21 @@
                 p.stats.totalErrors += errCount;
                 p.stats.sessions += 1;
 
+                const today = dateStamp();
+
                 if (typedCount >= 15) {
-                    p.history.push({ cpm, wpm, acc, date: dateStamp() });
-                    if (p.history.length > 30) p.history = p.history.slice(-30);
+                    p.history.push({ cpm, wpm, acc, date: today });
+                    if (p.history.length > 200) p.history = p.history.slice(-200);
                 }
 
-                const today = dateStamp();
                 p.activity[today] = (p.activity[today] || 0) + 1;
+
+                const yest = dateStamp(new Date(Date.now() - 86400000));
+                if (p.lastActiveDate !== today) {
+                    p.streak = p.lastActiveDate === yest ? (p.streak || 0) + 1 : 1;
+                    p.lastActiveDate = today;
+                }
+
                 persistProgress();
             }
 
@@ -4131,26 +5515,38 @@
                 }
                 wordsBox.appendChild(frag);
                 renderVisualKeyboard();
-                setTimeout(() => hiddenInput.focus(), 30);
+                setTimeout(focusTypingInput, 30);
             }
 
             function renderStageStrip(lesson, currentStageIdx) {
                 stageStrip.innerHTML = '';
                 const total = lesson.stages.length;
+
                 lesson.stages.forEach((st, idx) => {
                     const stageDone = isStageCompleted(lesson.id, idx);
                     const stageOpen = isStageUnlocked(lesson, idx);
+
                     const el = document.createElement('button');
                     el.type = 'button';
                     el.className = 'stage-step';
                     if (idx === currentStageIdx) el.classList.add('active');
                     if (stageDone) el.classList.add('done');
-                    if (stageOpen && idx !== currentStageIdx) el.classList.add('clickable');
 
                     el.innerHTML = `<span class="stage-step-title">${st.name}</span><span class="stage-step-num">${stageDone ? ICONS.check : `0${idx + 1}/0${total}`}</span>`;
-                    if (stageOpen && idx !== currentStageIdx) {
-                        el.addEventListener('click', () => startLesson(activeSession.courseId, activeSession.moduleIdx, activeSession.lessonIdx, idx));
+
+                    if (!stageOpen) {
+                        el.classList.add('locked-step');
+                        el.setAttribute('aria-disabled', 'true');
+                        el.addEventListener('click', () => {
+                            showLockHint(el, `Откроется после этапа 0${idx} («${lesson.stages[idx - 1].name}»)`);
+                        });
+                    } else if (idx !== currentStageIdx) {
+                        el.classList.add('clickable');
+                        el.addEventListener('click', () => {
+                            startLesson(activeSession.courseId, activeSession.moduleIdx, activeSession.lessonIdx, idx);
+                        });
                     }
+
                     stageStrip.appendChild(el);
                 });
             }
@@ -4246,16 +5642,17 @@
                 document.body.classList.remove('is-typing');
                 const { cpm, wpm, acc } = updateMetrics();
                 recordSessionStats(cpm, wpm, acc, batchTyped, batchErrors);
+                checkAchievements({ type: 'sprint', cpm, acc, errors: batchErrors });
 
-                const p = getActiveProgress();
-                const xp = Math.max(5, Math.round(activeSession.sprintSec / 3));
-                p.dailyXp += xp;
-                p.totalXp += xp;
+                const baseXp = Math.max(5, Math.round(activeSession.sprintSec / 3));
+                const res = grantXp(baseXp);
+                const xpText = res.bonusXp > 0 ? `+${res.totalAdded} XP (×2)` : `+${res.totalAdded} XP`;
+
                 persistProgress();
                 renderDailyGoal();
 
                 resultTitle.textContent = `Спринт ${activeSession.sprintSec}с завершён`;
-                resultSub.textContent = `${cpm} букв/мин · ${wpm} сл/мин · Точность ${acc}% · +${xp} XP`;
+                resultSub.textContent = `${cpm} букв/мин · ${wpm} сл/мин · Точность ${acc}% · ${xpText}`;
                 nextStageBtn.innerHTML = `<span>Новый спринт</span>${ICONS.arrowRight}`;
                 stageResult.classList.add('visible');
                 enterHint.style.display = 'inline';
@@ -4267,15 +5664,16 @@
                 document.body.classList.remove('is-typing');
                 const { cpm, wpm, acc } = updateMetrics();
                 recordSessionStats(cpm, wpm, acc, batchTyped, batchErrors);
+                checkAchievements({ type: 'mistakes', cpm, acc, errors: batchErrors });
 
-                const p = getActiveProgress();
-                p.dailyXp += 15;
-                p.totalXp += 15;
+                const res = grantXp(15);
+                const xpText = res.bonusXp > 0 ? `+${res.totalAdded} XP (×2)` : `+${res.totalAdded} XP`;
+
                 persistProgress();
                 renderDailyGoal();
 
                 resultTitle.textContent = 'Работа над ошибками завершена';
-                resultSub.textContent = `${cpm} букв/мин · ${wpm} сл/мин · Точность ${acc}% · +15 XP`;
+                resultSub.textContent = `${cpm} букв/мин · ${wpm} сл/мин · Точность ${acc}% · ${xpText}`;
                 nextStageBtn.innerHTML = `<span>В профиль</span>${ICONS.arrowRight}`;
                 stageResult.classList.add('visible');
                 enterHint.style.display = 'inline';
@@ -4292,18 +5690,18 @@
                 const { cpm, wpm, acc } = updateMetrics();
 
                 recordSessionStats(cpm, wpm, acc, batchTyped, batchErrors);
+                checkAchievements({ type: 'lesson', cpm, acc, errors: batchErrors });
 
                 const p = getActiveProgress();
                 const sKey = stageKey(lesson.id, stageIdx);
                 const isNewStage = !p.completedStages.includes(sKey);
                 const stageXp = getStageXp(lesson);
-                let gainedXp = 0;
+                let xpSuffix = '';
 
                 if (isNewStage) {
                     p.completedStages.push(sKey);
-                    p.dailyXp += stageXp;
-                    p.totalXp += stageXp;
-                    gainedXp = stageXp;
+                    const res = grantXp(stageXp);
+                    xpSuffix = res.bonusXp > 0 ? ` · +${res.totalAdded} XP (×2)` : ` · +${res.totalAdded} XP`;
                 }
 
                 let allStagesDone = true;
@@ -4325,7 +5723,6 @@
                 renderStageStrip(lesson, stageIdx);
 
                 const isLastStage = stageIdx === lesson.stages.length - 1;
-                const xpSuffix = gainedXp > 0 ? ` · +${gainedXp} XP` : '';
 
                 if (!isLastStage) {
                     resultTitle.textContent = `Этап 0${stageIdx + 1} завершён`;
@@ -4340,7 +5737,35 @@
 
                 stageResult.classList.add('visible');
                 enterHint.style.display = 'inline';
+
+                if (isCourseDone(p, courseId) && !p.celebratedCourses.includes(courseId)) {
+                    p.celebratedCourses.push(courseId);
+                    const bonus = grantXp(200);
+                    persistProgress();
+                    renderDailyGoal();
+                    openCourseCelebration(courseId, bonus.totalAdded);
+                } else if (lessonJustUnlockedNext && isModDone(p, courseId, moduleIdx)) {
+                    const modTitle = TITLES_CATALOG.find((t) => t.id === mod.id);
+                    if (modTitle) showToast(`Открыт новый титул: «${modTitle.name}»`);
+                }
             }
+
+            const courseModal = document.getElementById('courseModal');
+
+            function openCourseCelebration(courseId, bonusXp) {
+                const isRu = courseId === 'ru';
+                document.getElementById('courseModalTitle').textContent = isRu ? 'Курс «Слепая печать» пройден!' : 'Курс «Синтаксис кода» пройден!';
+                document.getElementById('courseModalDesc').textContent = isRu ? 'Все 6 модулей и 100 этапов позади. Вы освоили всю раскладку ЙЦУКЕН, регистр, пунктуацию и выносливость.' : 'Все 5 модулей и 80 этапов позади. Скобки, операторы и синтаксис Python / JS теперь на мышечной памяти.';
+                document.getElementById('courseModalBadge').textContent = isRu ? 'Мастер слепой печати' : 'Мастер синтаксиса';
+                document.getElementById('courseModalBonus').textContent = `+${bonusXp} XP`;
+                courseModal.classList.add('visible');
+            }
+
+            document.getElementById('courseModalClose').addEventListener('click', () => courseModal.classList.remove('visible'));
+            document.getElementById('courseModalProfile').addEventListener('click', () => {
+                courseModal.classList.remove('visible');
+                openProfileScreen();
+            });
 
             function proceedNext() {
                 if (!activeSession) return;
@@ -4371,12 +5796,129 @@
             });
 
             nextStageBtn.addEventListener('click', proceedNext);
-            typingStage.addEventListener('click', () => hiddenInput.focus());
+            function focusTypingInput() {
+                hiddenInput.value = ' ';
+                hiddenInput.focus({ preventScroll: true });
+                try {
+                    hiddenInput.setSelectionRange(1, 1);
+                } catch (e) {}
+            }
 
-            window.addEventListener('mousemove', () => {
-                if (document.body.classList.contains('is-typing')) document.body.classList.remove('is-typing');
+            typingStage.addEventListener('click', focusTypingInput);
+
+            function processBackspace() {
+                if (isStageFinished || cursor <= 0) return;
+                charSpans[cursor]?.classList.remove('current');
+                cursor--;
+                if (charSpans[cursor].classList.contains('correct')) correctCount = Math.max(0, correctCount - 1);
+                charSpans[cursor].classList.remove('correct', 'incorrect');
+                charSpans[cursor].classList.add('current');
+                syncScrollToCursor();
+                highlightNextKey();
+                playPop(false);
+            }
+
+            function processChar(ch) {
+                if (isStageFinished || !ch) return;
+
+                if (!startTime) {
+                    startTime = performance.now();
+                    startGhostCaret();
+                    if (activeSession?.type === 'arcade' && activeSession.sprintSec > 0) {
+                        sprintInterval = setInterval(() => {
+                            sprintRemaining--;
+                            timerVal.textContent = String(Math.max(0, sprintRemaining));
+                            if (sprintRemaining <= 0) finishSprint();
+                        }, 1000);
+                    }
+                }
+
+                document.body.classList.add('is-typing');
+
+                const expected = targetText[cursor];
+                const isCorrect = ch === expected;
+                totalTyped++;
+                batchTyped++;
+
+                const keyLower = expected.toLowerCase();
+                if (keyLower !== ' ') {
+                    const p = getActiveProgress();
+                    if (!p.keyErrors[keyLower]) p.keyErrors[keyLower] = { errors: 0, total: 0 };
+                    p.keyErrors[keyLower].total += 1;
+                    if (!isCorrect) p.keyErrors[keyLower].errors += 1;
+                }
+
+                charSpans[cursor].classList.remove('current');
+                if (isCorrect) {
+                    charSpans[cursor].classList.add('correct');
+                    correctCount++;
+                    wrongLayoutStreak = 0;
+                    setLayoutAlert(null);
+                    playPop(false);
+                } else {
+                    charSpans[cursor].classList.add('incorrect');
+                    errors++;
+                    batchErrors++;
+                    playPop(true);
+
+                    const sessionLang = getSessionLang();
+                    const pressedLower = ch.toLowerCase();
+                    const expectedLower = expected.toLowerCase();
+                    const mappedMatch = sessionLang === 'ru' ? EN_TO_RU[pressedLower] === expectedLower : RU_TO_EN[pressedLower] === expectedLower;
+
+                    if (mappedMatch) {
+                        wrongLayoutStreak++;
+                        if (wrongLayoutStreak >= 2) setLayoutAlert(sessionLang);
+                    } else {
+                        wrongLayoutStreak = 0;
+                    }
+                }
+
+                cursor++;
+                const m = updateMetrics();
+                progressFill.style.width = (cursor / targetText.length) * 100 + '%';
+
+                if (cursor < targetText.length) {
+                    charSpans[cursor].classList.add('current');
+                    syncScrollToCursor();
+                    highlightNextKey();
+                } else {
+                    if (activeSession.type === 'arcade') {
+                        if (activeSession.sprintSec > 0) {
+                            mountText(generateArcadeBatch(activeSession.preset, 45), false);
+                        } else {
+                            recordSessionStats(m.cpm, m.wpm, m.acc, batchTyped, batchErrors);
+                            mountText(generateArcadeBatch(activeSession.preset, 24), false);
+                        }
+                    } else if (activeSession.type === 'mistakes') {
+                        finishMistakes();
+                    } else {
+                        finishLessonStage();
+                    }
+                }
+            }
+
+            // Мобильный ввод (Android Gboard / iOS / IME)
+            hiddenInput.addEventListener('input', (e) => {
+                if (!screens.trainer.classList.contains('active')) return;
+                const val = hiddenInput.value;
+
+                if (e.inputType === 'deleteContentBackward' || val.length === 0) {
+                    processBackspace();
+                } else {
+                    const typed = val.startsWith(' ') ? val.slice(1) : val;
+                    for (const ch of typed) {
+                        if (isStageFinished) break;
+                        processChar(ch);
+                    }
+                }
+                hiddenInput.value = ' ';
+                try {
+                    hiddenInput.setSelectionRange(1, 1);
+                } catch (err) {}
             });
 
+            // Десктопный ввод
             window.addEventListener('keydown', (e) => {
                 if (!screens.trainer.classList.contains('active')) return;
                 if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') && e.target !== hiddenInput) return;
@@ -4402,101 +5944,12 @@
                 }
 
                 if (e.ctrlKey || e.metaKey || e.altKey) return;
+                if (e.isComposing || e.key === 'Unidentified' || e.key === 'Process') return;
                 if (e.key.length > 1 && e.key !== 'Backspace') return;
 
                 e.preventDefault();
-
-                if (e.key === 'Backspace') {
-                    if (cursor > 0) {
-                        charSpans[cursor]?.classList.remove('current');
-                        cursor--;
-                        if (charSpans[cursor].classList.contains('correct')) correctCount = Math.max(0, correctCount - 1);
-                        charSpans[cursor].classList.remove('correct', 'incorrect');
-                        charSpans[cursor].classList.add('current');
-                        syncScrollToCursor();
-                        highlightNextKey();
-                        playPop(false);
-                    }
-                    return;
-                }
-
-                if (!startTime) {
-                    startTime = performance.now();
-                    startGhostCaret();
-                    if (activeSession?.type === 'arcade' && activeSession.sprintSec > 0) {
-                        sprintInterval = setInterval(() => {
-                            sprintRemaining--;
-                            timerVal.textContent = String(Math.max(0, sprintRemaining));
-                            if (sprintRemaining <= 0) finishSprint();
-                        }, 1000);
-                    }
-                }
-
-                document.body.classList.add('is-typing');
-
-                const expected = targetText[cursor];
-                const isCorrect = e.key === expected;
-                totalTyped++;
-                batchTyped++;
-
-                // Запись статистики по клавише для тепловой карты
-                const keyLower = expected.toLowerCase();
-                if (keyLower !== ' ') {
-                    const p = getActiveProgress();
-                    if (!p.keyErrors[keyLower]) p.keyErrors[keyLower] = { errors: 0, total: 0 };
-                    p.keyErrors[keyLower].total += 1;
-                    if (!isCorrect) p.keyErrors[keyLower].errors += 1;
-                }
-
-                charSpans[cursor].classList.remove('current');
-                if (isCorrect) {
-                    charSpans[cursor].classList.add('correct');
-                    correctCount++;
-                    wrongLayoutStreak = 0;
-                    setLayoutAlert(null);
-                    playPop(false);
-                } else {
-                    charSpans[cursor].classList.add('incorrect');
-                    errors++;
-                    batchErrors++;
-                    playPop(true);
-
-                    // Умный детектор раскладки
-                    const sessionLang = getSessionLang();
-                    const pressedLower = e.key.toLowerCase();
-                    const expectedLower = expected.toLowerCase();
-                    const mappedMatch = sessionLang === 'ru' ? EN_TO_RU[pressedLower] === expectedLower : RU_TO_EN[pressedLower] === expectedLower;
-
-                    if (mappedMatch) {
-                        wrongLayoutStreak++;
-                        if (wrongLayoutStreak >= 2) setLayoutAlert(sessionLang);
-                    } else {
-                        wrongLayoutStreak = 0;
-                    }
-                }
-
-                cursor++;
-                const m = updateMetrics();
-                progressFill.style.width = (cursor / targetText.length) * 100 + '%';
-
-                if (cursor < targetText.length) {
-                    charSpans[cursor].classList.add('current');
-                    syncScrollToCursor();
-                    highlightNextKey();
-                } else {
-                    if (activeSession.type === 'arcade') {
-                        if (activeSession.sprintSec > 0) {
-                            mountText(generateArcadeBatch(activeSession.preset, 45), false);
-                        } else {
-                            recordSessionStats(m.cpm, m.wps, m.acc, batchTyped, batchErrors);
-                            mountText(generateArcadeBatch(activeSession.preset, 24), false);
-                        }
-                    } else if (activeSession.type === 'mistakes') {
-                        finishMistakes();
-                    } else {
-                        finishLessonStage();
-                    }
-                }
+                if (e.key === 'Backspace') processBackspace();
+                else processChar(e.key);
             });
 
             // ================= ИНИЦИАЛИЗАЦИЯ =================

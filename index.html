@@ -5,8 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="referrer" content="no-referrer" />
         <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';" />
-        <title>duoglash — слепая печать</title>
-
+        <title>DuoGlash — слепая печать</title>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Doto:wght@500;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -20,6 +19,7 @@
 
                 --border: #222429;
                 --border-strong: #32353d;
+                --divider: #181a1f;
 
                 --text-main: #efeff1;
                 --text-muted: #8e929b;
@@ -28,6 +28,12 @@
                 --accent-red: #d71921;
                 --accent-yellow: #eab308;
                 --accent-ok: #a4f4b5;
+                --error-color: #d71921;
+                --card-shadow: none;
+
+                --act-0: #1a1c20;
+                --act-1: #3b3e47;
+                --act-2: #8e929b;
 
                 --r-lg: 12px;
                 --r-md: 8px;
@@ -37,21 +43,75 @@
                 --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
                 --font-mono: 'JetBrains Mono', monospace;
 
+                --font-scale: 1;
                 --typing-size: 24px;
                 --typing-lh: 44px;
             }
 
+            /* Темная тема: светлее OLED, чисто-белый текст для дневного света */
+            body[data-surface='dark'] {
+                --bg: #181a20;
+                --surface-1: #22252d;
+                --surface-2: #2c303a;
+                --surface-3: #373c48;
+                --border: #343946;
+                --border-strong: #4b5263;
+                --divider: #2b2f39;
+                --text-main: #ffffff;
+                --text-muted: #c6cbd6;
+                --text-dim: #7f8798;
+                --accent-ok: #6ee7b7;
+                --error-color: #ff5560;
+                --act-0: #2b2f39;
+                --act-1: #4d5566;
+                --act-2: #9ba3b4;
+            }
+
+            /* Светлая тема: чистый светлый фон, контрастный тёмный текст */
+            body[data-surface='light'] {
+                --bg: #f3f4f6;
+                --surface-1: #ffffff;
+                --surface-2: #e9ecf0;
+                --surface-3: #dce1e8;
+                --border: #d5dbe3;
+                --border-strong: #aeb7c4;
+                --divider: #e4e7ec;
+                --text-main: #111317;
+                --text-muted: #4b5362;
+                --text-dim: #848d9e;
+                --accent-ok: #047857;
+                --error-color: #c8102e;
+                --card-shadow: 0 1px 3px rgba(17, 19, 23, 0.06);
+                --act-0: #e5e8ee;
+                --act-1: #b8c0ce;
+                --act-2: #647084;
+            }
+
+            /* 5 ступеней масштаба для всего сайта и поля ввода */
+            body[data-font-size='xs'] {
+                --font-scale: 0.86;
+                --typing-size: 17px;
+                --typing-lh: 32px;
+            }
             body[data-font-size='sm'] {
+                --font-scale: 0.93;
                 --typing-size: 20px;
                 --typing-lh: 38px;
             }
             body[data-font-size='md'] {
+                --font-scale: 1;
                 --typing-size: 24px;
                 --typing-lh: 44px;
             }
             body[data-font-size='lg'] {
-                --typing-size: 28px;
-                --typing-lh: 50px;
+                --font-scale: 1.12;
+                --typing-size: 29px;
+                --typing-lh: 52px;
+            }
+            body[data-font-size='xl'] {
+                --font-scale: 1.24;
+                --typing-size: 35px;
+                --typing-lh: 60px;
             }
 
             * {
@@ -64,11 +124,15 @@
                 background: var(--bg);
                 color: var(--text-main);
                 font-family: var(--font-ui);
+                font-size: calc(14px * var(--font-scale));
                 min-height: 100vh;
                 display: flex;
                 flex-direction: column;
                 -webkit-font-smoothing: antialiased;
                 font-feature-settings: 'tnum' 1;
+                transition:
+                    background 0.18s ease,
+                    color 0.18s ease;
             }
 
             body.is-typing .fade-on-type {
@@ -190,17 +254,6 @@
                 gap: 8px;
             }
 
-            .volume-control {
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-                background: var(--surface-1);
-                border: 1px solid var(--border);
-                border-radius: var(--r-md);
-                padding: 5px 10px 5px 7px;
-                height: 34px;
-            }
-
             .mute-btn {
                 background: transparent;
                 border: none;
@@ -217,45 +270,6 @@
             .mute-btn:hover,
             .mute-btn.active {
                 color: var(--text-main);
-            }
-
-            .volume-slider {
-                -webkit-appearance: none;
-                appearance: none;
-                width: 60px;
-                height: 3px;
-                background: var(--surface-3);
-                border-radius: 2px;
-                outline: none;
-                cursor: pointer;
-            }
-
-            .volume-slider::-webkit-slider-thumb {
-                -webkit-appearance: none;
-                appearance: none;
-                width: 11px;
-                height: 11px;
-                border-radius: 2px;
-                background: var(--text-main);
-                cursor: pointer;
-                border: 1px solid var(--bg);
-            }
-
-            .volume-slider::-moz-range-thumb {
-                width: 11px;
-                height: 11px;
-                border-radius: 2px;
-                background: var(--text-main);
-                cursor: pointer;
-                border: none;
-            }
-
-            .volume-pct {
-                font-family: var(--font-mono);
-                font-size: 11px;
-                color: var(--text-muted);
-                min-width: 28px;
-                text-align: right;
             }
 
             .profile-btn {
@@ -406,19 +420,6 @@
                 background: var(--surface-2);
                 border-color: var(--border-strong);
                 color: var(--text-main);
-            }
-
-            .course-tab .tag {
-                font-family: var(--font-mono);
-                font-size: 11px;
-                color: var(--text-dim);
-                background: var(--bg);
-                padding: 2px 6px;
-                border-radius: 4px;
-            }
-
-            .course-tab.active .tag {
-                color: var(--accent-yellow);
             }
 
             .daily-box {
@@ -1642,7 +1643,7 @@
 
             .profile-courses-grid {
                 display: grid;
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: repeat(3, 1fr);
                 gap: 12px;
                 margin-bottom: 14px;
             }
@@ -1750,18 +1751,18 @@
             }
 
             .hm-key.lvl-1 {
-                background: rgba(215, 25, 33, 0.18);
-                border-color: rgba(215, 25, 33, 0.45);
+                background: color-mix(in srgb, var(--error-color) 18%, var(--bg));
+                border-color: color-mix(in srgb, var(--error-color) 45%, var(--border));
                 color: var(--text-main);
             }
             .hm-key.lvl-2 {
-                background: rgba(215, 25, 33, 0.42);
-                border-color: rgba(215, 25, 33, 0.75);
+                background: color-mix(in srgb, var(--error-color) 48%, var(--bg));
+                border-color: color-mix(in srgb, var(--error-color) 75%, var(--border));
                 color: #ffffff;
             }
             .hm-key.lvl-3 {
-                background: var(--accent-red);
-                border-color: var(--accent-red);
+                background: var(--error-color);
+                border-color: var(--error-color);
                 color: #ffffff;
                 font-weight: 600;
             }
@@ -1825,18 +1826,6 @@
             }
 
             /* Настройки и бэкап в профиле */
-            .settings-grid {
-                background: var(--surface-1);
-                border: 1px solid var(--border);
-                border-radius: var(--r-lg);
-                padding: 18px 20px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                flex-wrap: wrap;
-                gap: 16px;
-                margin-bottom: 14px;
-            }
 
             .setting-block {
                 display: flex;
@@ -2037,16 +2026,6 @@
             }
 
             /* Наглядные настройки */
-            .settings-panel {
-                background: var(--surface-1);
-                border: 1px solid var(--border);
-                border-radius: var(--r-lg);
-                padding: 18px 20px;
-                display: flex;
-                flex-direction: column;
-                gap: 16px;
-                margin-bottom: 14px;
-            }
             .settings-row {
                 display: flex;
                 justify-content: space-between;
@@ -2193,28 +2172,6 @@
                 justify-content: flex-end;
                 gap: 10px;
                 margin-top: 4px;
-            }
-
-            /* ================= АКЦЕНТНЫЕ ТЕМЫ (ПО УРОВНЯМ) ================= */
-            body[data-theme='amber'] {
-                --accent-red: #ea580c;
-                --accent-yellow: #f59e0b;
-            }
-            body[data-theme='mint'] {
-                --accent-red: #059669;
-                --accent-yellow: #34d399;
-            }
-            body[data-theme='mono'] {
-                --accent-red: #efeff1;
-                --accent-yellow: #d4d4d8;
-            }
-
-            /* Опечатки всегда остаются красными независимо от темы */
-            .char.incorrect {
-                color: #d71921;
-            }
-            .char.incorrect.is-space {
-                background: rgba(215, 25, 33, 0.25);
             }
 
             /* ================= ПРЕСТИЖ В ШАПКЕ ================= */
@@ -2378,12 +2335,329 @@
             }
             .seg-visual button.locked-opt {
                 opacity: 0.42;
-                cursor: not-allowed;
             }
             .lvl-tag {
                 font-family: var(--font-mono);
                 font-size: 10px;
                 color: var(--text-dim);
+            }
+
+            /* ================= КНОПКА И ЭКРАН НАСТРОЕК ================= */
+            .settings-nav-btn {
+                height: 34px;
+                background: var(--surface-1);
+                border: 1px solid var(--border);
+                border-radius: var(--r-md);
+                padding: 0 11px;
+                color: var(--text-muted);
+                font-family: var(--font-ui);
+                font-size: calc(13px * var(--font-scale));
+                font-weight: 500;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                gap: 7px;
+                transition:
+                    background 0.15s ease,
+                    border-color 0.15s ease,
+                    color 0.15s ease;
+            }
+            .settings-nav-btn:hover,
+            .settings-nav-btn.active-screen {
+                background: var(--surface-2);
+                border-color: var(--border-strong);
+                color: var(--text-main);
+            }
+
+            .settings-page-grid {
+                display: flex;
+                flex-direction: column;
+                gap: 14px;
+                max-width: 820px;
+                margin: 0 auto;
+            }
+            .settings-head {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 12px;
+                margin-bottom: 16px;
+            }
+            .settings-head h1 {
+                font-size: calc(20px * var(--font-scale));
+                font-weight: 600;
+                letter-spacing: -0.015em;
+            }
+            .settings-card-sub {
+                font-size: calc(12.5px * var(--font-scale));
+                color: var(--text-muted);
+                line-height: 1.45;
+            }
+
+            .volume-row-lg {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                width: 100%;
+                background: var(--bg);
+                border: 1px solid var(--border);
+                border-radius: var(--r-md);
+                padding: 10px 14px;
+            }
+            .volume-slider-lg {
+                -webkit-appearance: none;
+                appearance: none;
+                flex: 1;
+                min-width: 140px;
+                height: 5px;
+                background: var(--surface-3);
+                border-radius: 3px;
+                outline: none;
+                cursor: pointer;
+            }
+            .volume-slider-lg::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 15px;
+                height: 15px;
+                border-radius: 4px;
+                background: var(--accent-yellow);
+                cursor: pointer;
+                border: 2px solid var(--bg);
+            }
+            .volume-slider-lg::-moz-range-thumb {
+                width: 15px;
+                height: 15px;
+                border-radius: 4px;
+                background: var(--accent-yellow);
+                cursor: pointer;
+                border: 2px solid var(--bg);
+            }
+            .volume-pct-lg {
+                font-family: var(--font-mono);
+                font-size: calc(13px * var(--font-scale));
+                color: var(--text-main);
+                min-width: 48px;
+                text-align: right;
+            }
+
+            .surface-chip {
+                display: inline-flex;
+                align-items: center;
+                gap: 7px;
+            }
+            .surface-swatch {
+                width: 12px;
+                height: 12px;
+                border-radius: 3px;
+                border: 1px solid var(--border-strong);
+                display: inline-block;
+            }
+
+            .glyph-xs {
+                font-family: var(--font-mono);
+                font-size: 11px;
+            }
+            .glyph-xl {
+                font-family: var(--font-mono);
+                font-size: 22px;
+            }
+
+            /* ================= ПОЛИРОВКА ПОД ВСЕ 3 ТЕМЫ ================= */
+            header,
+            .course-bar {
+                border-bottom-color: var(--divider);
+            }
+            .module-footer,
+            .panel-foot,
+            .auth-footnote {
+                border-top-color: var(--divider);
+            }
+            .stage-header-bar {
+                border-bottom-color: var(--divider);
+            }
+            .module-card,
+            .lesson-row,
+            .stat-card,
+            .course-prog-card,
+            .panel-card,
+            .profile-hero,
+            .typing-stage,
+            .daily-box,
+            .auth-card,
+            .module-banner,
+            .profile-danger-bar {
+                box-shadow: var(--card-shadow);
+            }
+
+            .lesson-row.current {
+                background: var(--surface-2);
+                border-color: var(--border-strong);
+            }
+            .lesson-row.done .lesson-num,
+            .stage-step.done {
+                border-color: color-mix(in srgb, var(--accent-yellow) 45%, var(--border));
+            }
+            .btn-primary:hover {
+                background: var(--text-main);
+                opacity: 0.88;
+            }
+
+            .char.incorrect {
+                color: var(--error-color);
+            }
+            .char.incorrect.is-space {
+                background: color-mix(in srgb, var(--error-color) 24%, transparent);
+            }
+            .char.ghost::after {
+                background: var(--text-dim);
+                opacity: 0.65;
+            }
+            body[data-caret='block'] .char.current {
+                background: color-mix(in srgb, var(--accent-yellow) 26%, transparent);
+            }
+
+            .act-dot {
+                background: var(--act-0);
+                border-color: var(--divider);
+            }
+            .act-dot.a1 {
+                background: var(--act-1);
+                border-color: var(--act-1);
+            }
+            .act-dot.a2 {
+                background: var(--act-2);
+                border-color: var(--act-2);
+            }
+            .act-dot.a3 {
+                background: var(--accent-yellow);
+                border-color: var(--accent-yellow);
+            }
+
+            body[data-surface='light'] .hm-key.lvl-1 {
+                color: var(--text-main);
+            }
+            body[data-surface='light'] .hm-key.lvl-2,
+            body[data-surface='light'] .hm-key.lvl-3 {
+                color: #ffffff;
+            }
+            body[data-surface='light'] .modal-backdrop {
+                background: rgba(15, 18, 24, 0.45);
+            }
+            body[data-surface='light'] .lock-hint {
+                box-shadow: 0 8px 24px rgba(17, 19, 23, 0.16);
+            }
+
+            /* ================= МАСШТАБИРОВАНИЕ ВСЕГО ШРИФТА НА САЙТЕ ================= */
+            .brand-name {
+                font-size: calc(21px * var(--font-scale));
+            }
+            .mode-btn {
+                font-size: calc(13px * var(--font-scale));
+            }
+            .profile-btn {
+                font-size: calc(13px * var(--font-scale));
+            }
+            .section-eyebrow {
+                font-size: calc(12px * var(--font-scale));
+            }
+            .course-tab {
+                font-size: calc(14px * var(--font-scale));
+            }
+            .daily-label {
+                font-size: calc(12px * var(--font-scale));
+            }
+            .daily-xp {
+                font-size: calc(15px * var(--font-scale));
+            }
+            .boost-meta {
+                font-size: calc(11.5px * var(--font-scale));
+            }
+            .module-body h2 {
+                font-size: calc(18px * var(--font-scale));
+            }
+            .module-body p {
+                font-size: calc(13.5px * var(--font-scale));
+            }
+            .module-index {
+                font-size: calc(13px * var(--font-scale));
+            }
+            .module-count,
+            .keys-preview {
+                font-size: calc(12px * var(--font-scale));
+            }
+            .module-banner h1 {
+                font-size: calc(22px * var(--font-scale));
+            }
+            .module-banner p {
+                font-size: calc(14px * var(--font-scale));
+            }
+            .lesson-content h3 {
+                font-size: calc(15.5px * var(--font-scale));
+            }
+            .lesson-desc {
+                font-size: calc(13px * var(--font-scale));
+            }
+            .lesson-meta-row,
+            .stage-step-title,
+            .stage-hint-text {
+                font-size: calc(12px * var(--font-scale));
+            }
+            .stage-pills,
+            .perk-sub-meta,
+            .level-xp-sub {
+                font-size: calc(11px * var(--font-scale));
+            }
+            .btn {
+                font-size: calc(13.5px * var(--font-scale));
+            }
+            .btn-sm,
+            .btn-toggle,
+            .preset-btn,
+            .sprint-btn {
+                font-size: calc(12.5px * var(--font-scale));
+            }
+            .back-btn {
+                font-size: calc(13px * var(--font-scale));
+            }
+            .metric-k {
+                font-size: calc(10.5px * var(--font-scale));
+            }
+            .metric-v {
+                font-size: calc(25px * var(--font-scale));
+            }
+            .profile-identity-text h1 {
+                font-size: calc(22px * var(--font-scale));
+            }
+            .profile-meta-line,
+            .stat-card-label,
+            .setting-label {
+                font-size: calc(12.5px * var(--font-scale));
+            }
+            .stat-card-val {
+                font-size: calc(28px * var(--font-scale));
+            }
+            .stat-dual-num {
+                font-size: calc(22px * var(--font-scale));
+            }
+            .course-prog-top h3 {
+                font-size: calc(15px * var(--font-scale));
+            }
+            .perk-main-num {
+                font-size: calc(20px * var(--font-scale));
+            }
+            .perk-desc,
+            .ach-desc {
+                font-size: calc(12.5px * var(--font-scale));
+            }
+            .title-chip {
+                font-size: calc(12.5px * var(--font-scale));
+            }
+            .result-info h3 {
+                font-size: calc(16px * var(--font-scale));
+            }
+            .result-info p {
+                font-size: calc(13px * var(--font-scale));
             }
 
             /* ================= АДАПТИВ (ПЛАНШЕТЫ И МОБИЛЬНЫЕ) ================= */
@@ -2412,9 +2686,6 @@
                 }
                 .profile-stats-grid {
                     grid-template-columns: repeat(2, 1fr);
-                }
-                .ach-list {
-                    grid-template-columns: 1fr;
                 }
                 .stage-strip {
                     grid-template-columns: repeat(2, 1fr);
@@ -2451,9 +2722,6 @@
                     justify-content: center;
                     flex-wrap: wrap;
                 }
-                .volume-slider {
-                    width: 48px;
-                }
                 .profile-btn {
                     max-width: 190px;
                 }
@@ -2467,8 +2735,21 @@
                     min-width: 0;
                 }
                 .course-tab {
-                    font-size: 13px;
-                    padding: 8px 12px;
+                    justify-content: center;
+                    font-size: calc(12.5px * var(--font-scale));
+                    padding: 8px 6px;
+                }
+                .course-tabs-wrap {
+                    width: 100%;
+                }
+                .course-tabs {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    width: 100%;
+                    gap: 6px;
+                }
+                .settings-nav-label {
+                    display: none;
                 }
 
                 .trainer-top {
@@ -2489,6 +2770,10 @@
                     font-size: 21px;
                 }
 
+                body[data-font-size='xs'] {
+                    --typing-size: 14px;
+                    --typing-lh: 26px;
+                }
                 body[data-font-size='sm'] {
                     --typing-size: 16px;
                     --typing-lh: 30px;
@@ -2498,8 +2783,12 @@
                     --typing-lh: 35px;
                 }
                 body[data-font-size='lg'] {
-                    --typing-size: 22px;
-                    --typing-lh: 40px;
+                    --typing-size: 23px;
+                    --typing-lh: 42px;
+                }
+                body[data-font-size='xl'] {
+                    --typing-size: 27px;
+                    --typing-lh: 48px;
                 }
 
                 .typing-stage {
@@ -2529,8 +2818,7 @@
                 .level-box {
                     width: 100%;
                 }
-                .panel-card,
-                .settings-panel {
+                .panel-card {
                     padding: 14px;
                 }
                 .seg-visual {
@@ -2566,28 +2854,28 @@
         <!-- ================= ШАПКА ================= -->
         <header class="fade-on-type">
             <div class="brand" id="brandHome" title="На главную">
-                <div class="brand-logo" aria-label="duoglash">
+                <div class="brand-logo" aria-label="DuoGlash">
                     <svg class="ico" width="24" height="24" viewBox="0 0 28 28" fill="none">
-                        <circle cx="5" cy="7" r="1.45" fill="#EFEFF1" />
-                        <circle cx="8" cy="7" r="1.45" fill="#EFEFF1" />
-                        <circle cx="5" cy="10" r="1.45" fill="#EFEFF1" />
-                        <circle cx="11" cy="10" r="1.45" fill="#EFEFF1" />
-                        <circle cx="5" cy="13" r="1.45" fill="#EFEFF1" />
-                        <circle cx="11" cy="13" r="1.45" fill="#EFEFF1" />
-                        <circle cx="5" cy="16" r="1.45" fill="#EFEFF1" />
-                        <circle cx="8" cy="16" r="1.45" fill="#EFEFF1" />
-                        <circle cx="19" cy="7" r="1.45" fill="#EFEFF1" />
-                        <circle cx="22" cy="7" r="1.45" fill="#EFEFF1" />
-                        <circle cx="16" cy="10" r="1.45" fill="#EFEFF1" />
-                        <circle cx="16" cy="13" r="1.45" fill="#EFEFF1" />
-                        <circle cx="20" cy="13" r="1.45" fill="#EFEFF1" />
-                        <circle cx="23" cy="13" r="1.45" fill="#EFEFF1" />
-                        <circle cx="19" cy="16" r="1.45" fill="#EFEFF1" />
-                        <circle cx="22" cy="16" r="1.45" fill="#EFEFF1" />
-                        <circle cx="14" cy="22" r="2.2" fill="#D71921" />
+                        <circle cx="5" cy="7" r="1.45" fill="currentColor" />
+                        <circle cx="8" cy="7" r="1.45" fill="currentColor" />
+                        <circle cx="5" cy="10" r="1.45" fill="currentColor" />
+                        <circle cx="11" cy="10" r="1.45" fill="currentColor" />
+                        <circle cx="5" cy="13" r="1.45" fill="currentColor" />
+                        <circle cx="11" cy="13" r="1.45" fill="currentColor" />
+                        <circle cx="5" cy="16" r="1.45" fill="currentColor" />
+                        <circle cx="8" cy="16" r="1.45" fill="currentColor" />
+                        <circle cx="19" cy="7" r="1.45" fill="currentColor" />
+                        <circle cx="22" cy="7" r="1.45" fill="currentColor" />
+                        <circle cx="16" cy="10" r="1.45" fill="currentColor" />
+                        <circle cx="16" cy="13" r="1.45" fill="currentColor" />
+                        <circle cx="20" cy="13" r="1.45" fill="currentColor" />
+                        <circle cx="23" cy="13" r="1.45" fill="currentColor" />
+                        <circle cx="19" cy="16" r="1.45" fill="currentColor" />
+                        <circle cx="22" cy="16" r="1.45" fill="currentColor" />
+                        <circle cx="14" cy="22" r="2.2" fill="var(--accent-red)" />
                     </svg>
                 </div>
-                <span class="brand-name">duoglash</span>
+                <span class="brand-name">DuoGlash</span>
             </div>
 
             <nav class="mode-switcher" aria-label="Режимы">
@@ -2602,11 +2890,13 @@
             </nav>
 
             <div class="header-controls">
-                <div class="volume-control" title="Громкость звука клавиш">
-                    <button class="mute-btn active" id="muteBtn" aria-label="Включить или выключить звук"></button>
-                    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="65" />
-                    <span class="volume-pct" id="volumePct">65%</span>
-                </div>
+                <button class="settings-nav-btn" id="settingsHeaderBtn" title="Настройки сайта" aria-label="Настройки">
+                    <svg class="ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    <span class="settings-nav-label">Настройки</span>
+                </button>
 
                 <button class="profile-btn" id="profileHeaderBtn" title="Войти или создать профиль">
                     <span class="profile-mini-avatar" id="headerAvatar"></span>
@@ -2626,14 +2916,9 @@
                             ВЫБОР КУРСА
                         </div>
                         <div class="course-tabs" id="courseTabs">
-                            <button class="course-tab active" data-course="ru">
-                                Слепая печать
-                                <span class="tag">ЙЦУКЕН</span>
-                            </button>
-                            <button class="course-tab" data-course="code">
-                                Синтаксис кода
-                                <span class="tag">PY / JS</span>
-                            </button>
+                            <button class="course-tab active" data-course="ru">Русский</button>
+                            <button class="course-tab" data-course="en">Английский</button>
+                            <button class="course-tab" data-course="code">Код</button>
                         </div>
                     </div>
 
@@ -2683,6 +2968,7 @@
 
                         <div class="arcade-presets" id="arcadePresets">
                             <button class="preset-btn active" data-preset="ru">RU</button>
+                            <button class="preset-btn" data-preset="en">EN</button>
                             <button class="preset-btn" data-preset="code">Код</button>
                         </div>
 
@@ -2922,11 +3208,21 @@
                 <div class="profile-courses-grid">
                     <div class="course-prog-card">
                         <div class="course-prog-top">
-                            <h3>Слепая печать (ЙЦУКЕН)</h3>
+                            <h3>Слепая печать (RU)</h3>
                             <span id="progRuText">0 / 20 уроков</span>
                         </div>
                         <div class="bar-track">
                             <div class="bar-fill" id="progRuBar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div class="course-prog-card">
+                        <div class="course-prog-top">
+                            <h3>Слепая печать (EN)</h3>
+                            <span id="progEnText">0 / 17 уроков</span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill" id="progEnBar" style="width: 0%"></div>
                         </div>
                     </div>
 
@@ -3044,60 +3340,134 @@
                     </div>
                 </div>
 
-                <!-- КАСТОМИЗАЦИЯ И БЭКАП -->
-                <div class="settings-panel">
-                    <div class="settings-row">
-                        <div class="setting-block">
-                            <span class="setting-label">Шрифт</span>
-                            <div class="seg-visual" id="fontSizeSeg">
-                                <button type="button" data-size="sm"><span class="glyph-sm">Аа</span><span>S</span></button>
-                                <button type="button" data-size="md" class="active"><span class="glyph-md">Аа</span><span>M</span></button>
-                                <button type="button" data-size="lg"><span class="glyph-lg">Аа</span><span>L</span></button>
-                            </div>
-                        </div>
-
-                        <div class="setting-block">
-                            <span class="setting-label">Курсор</span>
-                            <div class="seg-visual" id="caretStyleSeg">
-                                <button type="button" data-caret="line" class="active"><span class="caret-ico line"></span><span>Линия</span></button>
-                                <button type="button" data-caret="block"><span class="caret-ico block"></span><span>Блок</span></button>
-                                <button type="button" data-caret="underline"><span class="caret-ico underline"></span><span>Черта</span></button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="settings-row">
-                        <div class="setting-block">
-                            <span class="setting-label">Акцент</span>
-                            <div class="seg-visual" id="themeSeg"></div>
-                        </div>
-
-                        <div class="setting-block">
-                            <span class="setting-label">Звук клавиш</span>
-                            <div class="seg-visual" id="soundSeg"></div>
-                        </div>
-                    </div>
-
-                    <div class="settings-preview">
-                        <div class="settings-preview-text no-ligatures"><span class="char correct">ритм </span><span class="char current">п</span><span>ечати без пауз</span></div>
-                        <span class="stage-pills" id="previewMeta">24 px · Линия</span>
-                    </div>
-
-                    <div class="settings-row">
-                        <div class="setting-block">
-                            <button class="btn btn-secondary btn-sm" id="exportBackupBtn"></button>
-                            <button class="btn btn-secondary btn-sm" id="importBackupBtn"></button>
-                            <input type="file" id="importFileInput" accept="application/json,.json" style="display: none" />
-                            <button class="btn btn-secondary btn-sm" id="resetSettingsBtn">Сброс настроек</button>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="profile-danger-bar">
                     <span>Управление локальным профилем</span>
                     <div class="danger-actions">
                         <button class="btn btn-danger" id="resetProgressBtn"></button>
                         <button class="btn btn-danger" id="deleteAccountBtn"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= ЭКРАН 5: НАСТРОЙКИ ================= -->
+            <section id="screen-settings" class="screen">
+                <div class="settings-page-grid">
+                    <div class="settings-head">
+                        <button class="back-btn" id="settingsBackBtn">
+                            <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="19" y1="12" x2="5" y2="12"></line>
+                                <polyline points="12 19 5 12 12 5"></polyline>
+                            </svg>
+                            <span>К тренировкам</span>
+                        </button>
+                        <h1>Настройки</h1>
+                    </div>
+
+                    <!-- 1. ВНЕШНИЙ ВИД И ТЕМЫ -->
+                    <div class="panel-card">
+                        <div class="panel-head">
+                            <div class="section-eyebrow"><span class="eyebrow-dot"></span>ТЕМА И АКЦЕНТЫ</div>
+                            <span class="stage-pills" id="themeUnlockNote">Акценты адаптированы под тему</span>
+                        </div>
+
+                        <div class="settings-row">
+                            <div class="setting-block">
+                                <span class="setting-label">Оформление</span>
+                                <div class="seg-visual" id="surfaceSeg">
+                                    <button type="button" data-surface="oled" class="active">
+                                        <span class="surface-chip"><span class="surface-swatch" style="background: #0a0a0b"></span><span>OLED</span></span>
+                                    </button>
+                                    <button type="button" data-surface="dark">
+                                        <span class="surface-chip"><span class="surface-swatch" style="background: #22252d"></span><span>Тёмная</span></span>
+                                    </button>
+                                    <button type="button" data-surface="light">
+                                        <span class="surface-chip"><span class="surface-swatch" style="background: #f3f4f6"></span><span>Светлая</span></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-row">
+                            <div class="setting-block">
+                                <span class="setting-label">Акцентный цвет</span>
+                                <div class="seg-visual" id="themeSeg"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. ШРИФТ, КУРСОР И ПОМОЩНИКИ -->
+                    <div class="panel-card">
+                        <div class="panel-head">
+                            <div class="section-eyebrow"><span class="eyebrow-dot yellow"></span>ШРИФТ И ПЕЧАТЬ</div>
+                            <span class="stage-pills" id="previewMeta">M · 24 px · Линия</span>
+                        </div>
+                        <p class="settings-card-sub">Размер шрифта меняет масштаб всего интерфейса и строки набора одновременно.</p>
+
+                        <div class="settings-row">
+                            <div class="setting-block">
+                                <span class="setting-label">Размер шрифта</span>
+                                <div class="seg-visual" id="fontSizeSeg">
+                                    <button type="button" data-size="xs"><span class="glyph-xs">Аа</span><span>XS</span></button>
+                                    <button type="button" data-size="sm"><span class="glyph-sm">Аа</span><span>S</span></button>
+                                    <button type="button" data-size="md" class="active"><span class="glyph-md">Аа</span><span>M</span></button>
+                                    <button type="button" data-size="lg"><span class="glyph-lg">Аа</span><span>L</span></button>
+                                    <button type="button" data-size="xl"><span class="glyph-xl">Аа</span><span>XL</span></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-row">
+                            <div class="setting-block">
+                                <span class="setting-label">Курсор</span>
+                                <div class="seg-visual" id="caretStyleSeg">
+                                    <button type="button" data-caret="line" class="active"><span class="caret-ico line"></span><span>Линия</span></button>
+                                    <button type="button" data-caret="block"><span class="caret-ico block"></span><span>Блок</span></button>
+                                    <button type="button" data-caret="underline"><span class="caret-ico underline"></span><span>Черта</span></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-preview">
+                            <div class="settings-preview-text no-ligatures"><span class="char correct">ритм </span><span class="char current">п</span><span>ечати без пауз</span></div>
+                        </div>
+                    </div>
+
+                    <!-- 3. ЗВУК -->
+                    <div class="panel-card">
+                        <div class="panel-head">
+                            <div class="section-eyebrow"><span class="eyebrow-dot"></span>ЗВУК И ОТКЛИК</div>
+                            <span class="stage-pills">диапазон 0–200%</span>
+                        </div>
+
+                        <div class="volume-row-lg">
+                            <button type="button" class="mute-btn active" id="muteBtn" aria-label="Включить или выключить звук"></button>
+                            <input type="range" class="volume-slider-lg" id="volumeSlider" min="0" max="200" step="1" value="80" />
+                            <span class="volume-pct-lg" id="volumePct">80%</span>
+                            <button type="button" class="btn btn-secondary btn-sm" id="testSoundBtn">Тест</button>
+                        </div>
+
+                        <div class="settings-row">
+                            <div class="setting-block">
+                                <span class="setting-label">Профиль звука</span>
+                                <div class="seg-visual" id="soundSeg"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. ДАННЫЕ И СБРОС -->
+                    <div class="panel-card">
+                        <div class="panel-head">
+                            <div class="section-eyebrow"><span class="eyebrow-dot yellow"></span>ДАННЫЕ И БЭКАП</div>
+                            <span class="stage-pills">локальный JSON</span>
+                        </div>
+                        <div class="settings-row">
+                            <div class="setting-block">
+                                <button type="button" class="btn btn-secondary btn-sm" id="exportBackupBtn"></button>
+                                <button type="button" class="btn btn-secondary btn-sm" id="importBackupBtn"></button>
+                                <input type="file" id="importFileInput" accept="application/json,.json" style="display: none" />
+                            </div>
+                            <button type="button" class="btn btn-secondary btn-sm" id="resetSettingsBtn">Сбросить настройки</button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -3477,6 +3847,158 @@
                     ],
                 },
 
+                en: {
+                    title: 'Слепая печать (QWERTY)',
+                    modules: [
+                        {
+                            id: 'en-m1',
+                            code: 'EN 01',
+                            title: 'Фундамент и средний ряд',
+                            description: 'Постановка пальцев на тактильные засечки F и J. Осваиваем базовый средний ряд английской раскладки и вырабатываем ровный ритм.',
+                            keys: 'A S D F G H J K L ;',
+                            lessons: [
+                                createLesson({ id: 'en-m1-l1', title: 'Опорные клавиши: F и J', description: 'Указательные пальцы запоминают главные опорные клавиши с засечками — базу всей раскладки QWERTY.', keys: 'F J', xp: 35, hints: ['Переключитесь на английскую раскладку (EN)', 'Спокойное чередование указательных пальцев', 'Базовые комбинации F и J', 'Ровный темп без пауз', 'Финальное закрепление опорных клавиш'], drills: ['fj', 'jf', 'ffj', 'jjf', 'fjf', 'jfj', 'fjfj', 'jfjf'], bigrams: ['fjfj', 'jfjf', 'ffjf', 'jjfj', 'fjjf', 'jffj', 'fjf', 'jfj'], words: ['fj', 'jf', 'fjf', 'jfj', 'ffjj', 'jjff', 'fjfjf', 'jfjfj'], flow: ['fjfj', 'jffj', 'fjjf', 'jfjf', 'ffjfj', 'jjfjf', 'fjfjj'], phrases: ['fj jf fjf jfj fjfj jfjf', 'ffj jjf fjjf jffj fj jf', 'fjfjf jfjfj fj jf fjf jfj'] }, 701),
+                                createLesson({ id: 'en-m1-l2', title: 'Средние и безымянные: D K S L', description: 'Подключаем средние и безымянные пальцы обеих рук, не отрывая указательные от F и J.', keys: 'D K S L + F J', xp: 40, drills: ['dk', 'kd', 'sl', 'ls', 'fd', 'jk', 'dfk', 'jkl', 'sld'], bigrams: ['asdf', 'jkl', 'fdkj', 'slkd', 'dlsf', 'klsd', 'flds', 'jksd'], words: ['ask', 'all', 'fall', 'lad', 'sad', 'dad', 'add', 'flask', 'salad', 'falls', 'skid', 'lass'], flow: ['fall', 'salad', 'flask', 'falls', 'dad', 'lad', 'sad', 'ask', 'all', 'add', 'lass'], phrases: ['all lads ask dad', 'a sad lad falls', 'add a salad flask', 'ask all lads as dad falls'] }, 702),
+                                createLesson({ id: 'en-m1-l3', title: 'Мизинцы и края ряда: A и ;', description: 'Вводим мизинцы на крайние клавиши среднего ряда без заваливания кистей.', keys: 'A ; + Home Row', xp: 45, drills: ['a;', ';a', 'as', 'l;', 'fa', 'j;', 'asdf', 'jkl;', 'sal;'], bigrams: ['as;a', 'la;s', 'fa;d', 'ka;l', 'da;s', 'sa;f', 'ja;k'], words: ['as;', 'all;', 'ask;', 'fall;', 'salad;', 'flask;', 'lass;', 'alas;', 'dad;', 'add;', 'alfalfa'], flow: ['ask;', 'fall;', 'salad;', 'flask;', 'alas;', 'dad;', 'all;', 'add;', 'lass;', 'alfalfa'], phrases: ['ask all; add a salad; fall fast;', 'alas; a flask falls; dad asks;', 'all lads fall; add a salad; ask;'] }, 703),
+                                createLesson({ id: 'en-m1-l4', title: 'Выход к центру: G и H', description: 'Указательные пальцы тянутся в центр (G и H) и сразу возвращаются на F и J. Полный средний ряд.', keys: 'G H + Full Home Row', xp: 50, drills: ['fg', 'jh', 'gf', 'hj', 'gh', 'hg', 'fgh', 'jhg', 'agh'], bigrams: ['glad', 'half', 'dash', 'hall', 'flag', 'flash', 'glass', 'shall'], words: ['glad', 'half', 'dash', 'hall', 'flag', 'flash', 'glass', 'shall', 'ash', 'has', 'had', 'gas', 'gag', 'hag', 'lag', 'lash', 'slash', 'gash', 'jag', 'shag', 'shad', 'shah', 'flask', 'gala'], flow: ['flash', 'glass', 'shall', 'flag', 'glad', 'half', 'dash', 'hall', 'slash', 'gala', 'flask', 'has', 'had'], phrases: ['a glad lad has a half glass', 'dash past the hall flag', 'a flash shall pass a glass hall', 'dad had half a salad and a glass'] }, 704),
+                            ],
+                        },
+                        {
+                            id: 'en-m2',
+                            code: 'EN 02',
+                            title: 'Верхний ряд',
+                            description: 'Короткий выход пальцев в верхний ряд и мгновенный возврат на базовую линию. Осваиваем самые частые гласные и согласные английского.',
+                            keys: 'Q W E R T Y U I O P',
+                            lessons: [
+                                createLesson({ id: 'en-m2-l1', title: 'Главные гласные: E и I', description: 'Средние пальцы выходят вверх на E и I — самые частотные гласные в английских текстах.', keys: 'E I + Home Row', xp: 45, drills: ['de', 'ki', 'ed', 'ik', 'ei', 'ie', 'fe', 'ji', 'sed', 'lik'], bigrams: ['like', 'side', 'life', 'file', 'feel', 'seed', 'desk', 'hide'], words: ['like', 'side', 'life', 'file', 'feel', 'seed', 'desk', 'hide', 'deal', 'head', 'lead', 'read', 'leaf', 'idea', 'idle', 'hill', 'fill', 'kill', 'silk', 'milk', 'held', 'field', 'shield', 'slide', 'agile', 'ideal'], flow: ['field', 'shield', 'slide', 'ideal', 'life', 'file', 'desk', 'like', 'side', 'feel', 'head', 'lead', 'leaf', 'idea'], phrases: ['he likes a desk side file', 'feel a fresh leaf in the field', 'she held a glass shield and a slide', 'an ideal life has a clear head'] }, 711),
+                                createLesson({ id: 'en-m2-l2', title: 'Указательные вверх: R и U', description: 'Прямой выход указательных пальцев вверх на R и U с чётким возвратом на F и J.', keys: 'R U', xp: 45, drills: ['fr', 'ju', 'rf', 'uj', 'ru', 'ur', 'gr', 'hu', 'fur', 'rug'], bigrams: ['rule', 'sure', 'fire', 'free', 'dark', 'hard', 'rush', 'user'], words: ['rule', 'sure', 'fire', 'free', 'dark', 'hard', 'rush', 'user', 'true', 'blue', 'full', 'pull', 'push', 'dust', 'just', 'rust', 'hour', 'four', 'gear', 'hear', 'fear', 'dear', 'near', 'read', 'real', 'grade', 'guide', 'fluid', 'regular'], flow: ['guide', 'fluid', 'grade', 'regular', 'user', 'rule', 'sure', 'free', 'fire', 'hard', 'rush', 'hour', 'near', 'read', 'real'], phrases: ['a clear rule guides a real user', 'read four hard files near the fire', 'a fluid rush feels free and sure', 'hear a loud gear shift in the dark'] }, 712),
+                                createLesson({ id: 'en-m2-l3', title: 'Центр и края вверху: T Y W O', description: 'Подключаем центр верхнего ряда (T, Y) и безымянные пальцы (W, O) — открывается большая часть живого словаря.', keys: 'T Y W O', xp: 50, drills: ['ft', 'jy', 'sw', 'lo', 'tw', 'yo', 'to', 'wo', 'try', 'two'], bigrams: ['work', 'word', 'flow', 'grow', 'slow', 'stay', 'play', 'today'], words: ['work', 'word', 'flow', 'grow', 'slow', 'stay', 'play', 'today', 'world', 'water', 'write', 'worth', 'story', 'short', 'light', 'right', 'sight', 'first', 'style', 'start', 'smart', 'sweet', 'great', 'early', 'ready', 'focus', 'tower', 'power'], flow: ['world', 'water', 'write', 'story', 'light', 'right', 'first', 'style', 'start', 'ready', 'today', 'power', 'tower', 'work', 'flow'], phrases: ['write two short words with steady flow', 'work smart today to grow your skill', 'stay ready for a bright new story', 'the right style turns slow work into power'] }, 713),
+                                createLesson({ id: 'en-m2-l4', title: 'Края верхнего ряда: Q и P', description: 'Мизинцы осваивают крайние клавиши Q и P. Полное закрытие верхнего и среднего рядов.', keys: 'Q P + Top & Home', xp: 55, drills: ['aq', ';p', 'qa', 'p;', 'qp', 'pq', 'qu', 'pl', 'pr', 'sp'], bigrams: ['play', 'plan', 'part', 'path', 'page', 'step', 'stop', 'quick'], words: ['play', 'plan', 'part', 'path', 'page', 'step', 'stop', 'quick', 'quiet', 'quite', 'equal', 'equip', 'paper', 'power', 'point', 'plain', 'plate', 'place', 'press', 'speed', 'spark', 'split', 'shape', 'sharp', 'group', 'input', 'depth', 'quote', 'query', 'squad'], flow: ['quick', 'quiet', 'equal', 'paper', 'point', 'place', 'press', 'speed', 'spark', 'shape', 'sharp', 'input', 'quote', 'query', 'group'], phrases: ['press each key with a quick quiet tap', 'a clear plan keeps the path sharp and plain', 'speed grows step by step on every page', 'split the group query into equal parts'] }, 714),
+                            ],
+                        },
+                        {
+                            id: 'en-m3',
+                            code: 'EN 03',
+                            title: 'Нижний ряд и полный алфавит',
+                            description: 'Короткие движения пальцев вниз без смещения запястий. По итогам модуля вы владеете всеми 26 буквами английского алфавита.',
+                            keys: 'Z X C V B N M',
+                            lessons: [
+                                createLesson(
+                                    {
+                                        id: 'en-m3-l1',
+                                        title: 'Правый указательный вниз: N и M',
+                                        description: 'Правый указательный палец отрабатывает две важнейшие согласные нижнего ряда — N и M.',
+                                        keys: 'N M',
+                                        xp: 50,
+                                        drills: ['jn', 'jm', 'nj', 'mj', 'nm', 'mn', 'hn', 'km', 'man', 'men'],
+                                        bigrams: ['mind', 'main', 'name', 'time', 'line', 'fine', 'note', 'mode'],
+                                        words: ['mind', 'main', 'name', 'time', 'line', 'fine', 'note', 'mode', 'make', 'more', 'most', 'move', 'many', 'menu', 'frame', 'human', 'month', 'morning', 'moment', 'minute', 'motion', 'modern', 'minimal', 'meaning', 'monitor', 'pattern', 'rhythm', 'simple', 'system', 'timing'],
+                                        flow: ['moment', 'minute', 'motion', 'modern', 'minimal', 'meaning', 'monitor', 'pattern', 'simple', 'system', 'timing', 'morning', 'human', 'frame'],
+                                        phrases: ['a calm mind makes minimal motion feel simple', 'note the main timing pattern in every minute', 'modern design brings meaning to a clean monitor', 'more time on the home line builds fine rhythm'],
+                                    },
+                                    721,
+                                ),
+                                createLesson(
+                                    {
+                                        id: 'en-m3-l2',
+                                        title: 'Левая рука вниз: C и V',
+                                        description: 'Средний и указательный пальцы левой руки осваивают C и V без подъёма кисти.',
+                                        keys: 'C V',
+                                        xp: 50,
+                                        drills: ['dc', 'fv', 'cd', 'vf', 'cv', 'vc', 'fc', 'dv', 'cat', 'van'],
+                                        bigrams: ['code', 'core', 'care', 'call', 'view', 'very', 'move', 'save'],
+                                        words: ['code', 'core', 'care', 'call', 'view', 'very', 'move', 'save', 'calm', 'card', 'case', 'clean', 'clear', 'click', 'close', 'color', 'craft', 'curve', 'cover', 'value', 'valid', 'level', 'event', 'every', 'never', 'river', 'drive', 'voice', 'active', 'device', 'visual', 'vector', 'cursor'],
+                                        flow: ['active', 'device', 'visual', 'vector', 'cursor', 'clean', 'clear', 'click', 'color', 'craft', 'value', 'level', 'event', 'every', 'voice'],
+                                        phrases: ['clean code saves every active device from clutter', 'a clear visual cursor keeps your voice calm', 'move with care over every curve and vector', 'cover the core level before you chase pure velocity'],
+                                    },
+                                    722,
+                                ),
+                                createLesson(
+                                    {
+                                        id: 'en-m3-l3',
+                                        title: 'Центр и безымянный внизу: B и X',
+                                        description: 'Левый указательный тянется к B, безымянный — на X. Закрепляем точный возврат.',
+                                        keys: 'B X',
+                                        xp: 55,
+                                        drills: ['fb', 'sx', 'bf', 'xs', 'bx', 'xb', 'gb', 'dx', 'box', 'fix'],
+                                        bigrams: ['base', 'best', 'back', 'book', 'text', 'next', 'exit', 'flex'],
+                                        words: ['base', 'best', 'back', 'book', 'text', 'next', 'exit', 'flex', 'beat', 'bell', 'bold', 'both', 'build', 'habit', 'basic', 'block', 'board', 'brand', 'brief', 'index', 'extra', 'exact', 'pixel', 'mixed', 'fixed', 'relax', 'matrix', 'syntax', 'context', 'balance', 'keyboard'],
+                                        flow: ['balance', 'keyboard', 'context', 'syntax', 'matrix', 'pixel', 'exact', 'extra', 'index', 'habit', 'block', 'board', 'build', 'relax', 'fixed'],
+                                        phrases: ['build a balanced keyboard habit from the base up', 'exact syntax and fixed context make text easy to read', 'relax both hands before you move to the next block', 'a bold pixel matrix looks sharp on every screen'],
+                                    },
+                                    723,
+                                ),
+                                createLesson(
+                                    {
+                                        id: 'en-m3-l4',
+                                        title: 'Последняя буква Z и полный алфавит',
+                                        description: 'Левый мизинец добавляет последнюю букву Z. С этого момента доступен любой английский текст.',
+                                        keys: 'Z + A–Z',
+                                        xp: 60,
+                                        drills: ['az', 'za', 'sz', 'zs', 'ze', 'zi', 'zo', 'zu', 'zap', 'zen'],
+                                        bigrams: ['zero', 'zone', 'size', 'zoom', 'quiz', 'lazy', 'jazz', 'buzz'],
+                                        words: ['zero', 'zone', 'size', 'zoom', 'quiz', 'lazy', 'jazz', 'buzz', 'zen', 'maze', 'gaze', 'haze', 'blaze', 'glaze', 'prize', 'freeze', 'breeze', 'puzzle', 'design', 'rhythm', 'typing', 'muscle', 'memory', 'smooth', 'steady', 'horizon', 'optimize', 'organize', 'visualize', 'recognize'],
+                                        flow: ['horizon', 'optimize', 'organize', 'visualize', 'recognize', 'freeze', 'breeze', 'puzzle', 'zero', 'zone', 'size', 'zoom', 'typing', 'steady', 'smooth'],
+                                        phrases: ['zero noise puts your typing into a calm zen zone', 'organize your size and zoom to visualize the maze', 'the quick brown fox jumps over the lazy dog with zero errors', 'optimize muscle memory until every key feels like a breeze'],
+                                    },
+                                    724,
+                                ),
+                            ],
+                        },
+                        {
+                            id: 'en-m4',
+                            code: 'EN 04',
+                            title: 'Регистр, пунктуация и цифры',
+                            description: 'Перекрёстный Shift, английская пунктуация, апострофы и верхний цифровой ряд от 1 до 0.',
+                            keys: 'Shift · . , ? ! \' " 0-9',
+                            lessons: [
+                                createLesson({ id: 'en-m4-l1', title: 'Перекрёстный Shift', description: 'Буква слева — жмём правый Shift; буква справа — левый. Быстрые заглавные без потери темпа.', keys: 'Left / Right Shift', xp: 55, drills: ['Fj', 'Jf', 'Dk', 'Kd', 'As', 'Sa', 'Gh', 'Hg', 'Nm', 'Mn'], bigrams: ['Path', 'Flow', 'Mode', 'Time', 'Line', 'Text', 'Pace', 'Work'], words: ['London', 'Tokyo', 'Miami', 'Design', 'System', 'Rhythm', 'Sprint', 'Arcade', 'Module', 'Lesson', 'Profile', 'Keyboard', 'Practice', 'Accuracy', 'Velocity', 'Progress', 'Focus', 'DuoGlash'], flow: ['DuoGlash', 'Practice', 'Accuracy', 'Velocity', 'Progress', 'Keyboard', 'Profile', 'Arcade', 'Sprint', 'System', 'Design', 'London', 'Tokyo'], phrases: ['DuoGlash turns Daily Practice into Smooth Progress', 'Shift with the Opposite Hand for Clean Capital Letters', 'London Tokyo and Miami share One Simple Keyboard Layout', 'Accuracy and Rhythm always Beat Random Bursts of Speed'] }, 731),
+                                createLesson({ id: 'en-m4-l2', title: 'Пунктуация и сокращения', description: 'Точка, запятая, апостроф, вопросы и кавычки — всё для живой английской речи.', keys: '. , \' ? ! : ; "', xp: 60, drills: ["don't", "it's", "we're", 'yes, no.', 'why?', 'now!', '"flow"', 'step: one;'], bigrams: ["don't rush.", "it's simple,", 'keep going!', 'ready yet?', 'rule one:', '"stay calm"'], words: ["you'll", "can't", "won't", "that's", "let's", 'clear, crisp, fast.', 'wait: check the pace;', 'why stop now?'], flow: ["Don't chase speed; build accuracy first.", "It's easier when you look two words ahead.", 'Keep your wrists relaxed, breathe, and let rhythm lead!'], exam: "Don't worry if you make a mistake: just breathe, reset your rhythm, and keep moving. Why do top typists look so calm? Because they don't rush! They focus on clean, even keystrokes, and speed follows naturally." }, 732),
+                                createLesson({ id: 'en-m4-l3', title: 'Цифровой ряд 0–9', description: 'Выход на самую верхнюю цифровую строку и быстрый возврат на средний ряд.', keys: '1 2 3 4 5 6 7 8 9 0', xp: 65, drills: ['12', '34', '56', '78', '90', '10', '24', '39', '47', '85'], bigrams: ['100', '2026', '60 fps', '16 ms', '98%', '250 cpm', '01/05', '3.14'], words: ['level 01', 'stage 05', 'sprint 30s', 'goal 100', 'delay 12ms', 'score 99%', 'year 2026'], flow: ['15 minutes a day adds 20 to 35 wpm in just 14 days.', 'Level 08 unlocked at 1750 xp with 97% accuracy.', 'Track 3 metrics: 280 cpm, 56 wpm, and 0 missed days.'], exam: 'In 2026, typing at 60 wpm or 300 cpm saves hours every week. Even 10 to 15 minutes of daily practice across 14 days can push your accuracy above 96% and cut input hesitation down to under 16 ms.' }, 733),
+                            ],
+                        },
+                        {
+                            id: 'en-m5',
+                            code: 'EN 05',
+                            title: 'Беглость и живые тексты',
+                            description: 'Финальный модуль на длинных осмысленных абзацах для закрепления беглой английской печати.',
+                            keys: 'Полная свобода печати',
+                            lessons: [
+                                createLesson(
+                                    {
+                                        id: 'en-m5-l1',
+                                        title: 'Тексты о технологиях и дизайне',
+                                        description: 'Набор связных абзацев о дизайне, интерфейсах и скорости мышления.',
+                                        keys: 'Real Prose',
+                                        xp: 70,
+                                        drills: ['clean interfaces stay out of your way', 'every keystroke should feel instant', 'muscle memory beats visual search'],
+                                        bigrams: ['Good tools disappear while you focus on the real task.', 'Consistent rhythm always outperforms frantic bursts.'],
+                                        words: ['When your hands know the entire layout by feel, your attention stays completely on your ideas instead of hunting for keys.', 'Minimal interfaces reduce visual fatigue during long sessions.'],
+                                        flow: ['Great software respects your attention. It responds in milliseconds, keeps controls predictable, and lets you enter a quiet flow state without fighting clutter.'],
+                                        exam: 'Touch typing changes how you think at a computer. Instead of translating ideas letter by letter while glancing down at the keyboard, your fingers flow through entire phrases automatically. Every note, message, and line of code arrives on screen almost as fast as you imagine it.',
+                                    },
+                                    741,
+                                ),
+                                createLesson(
+                                    {
+                                        id: 'en-m5-l2',
+                                        title: 'Финальный экзамен',
+                                        description: 'Объёмный финальный экзамен: удерживайте стабильный темп и высокую точность до последней точки.',
+                                        keys: 'Course Final',
+                                        xp: 80,
+                                        drills: ['steady breathing holds the pace', 'read two words ahead on the line', 'soft touches prevent finger fatigue'],
+                                        bigrams: ['Slow is smooth, and smooth soon becomes fast.', 'Keep your shoulders loose and trust your hands.'],
+                                        words: ['The secret to effortless speed is reading ahead so your fingers are already preparing the next word before the current one ends.', 'Short daily sessions build stronger habits than rare marathons.'],
+                                        flow: ['You have trained every row, every finger, punctuation, and numbers. Now let the whole alphabet blend into one continuous, relaxed stream of motion.'],
+                                        exam: "Congratulations: you have reached the final stage of the English touch typing course! On this last stretch, don't sprint through the opening words only to stumble later. Keep your palms light, read slightly ahead along the line, and maintain a calm, steady cadence all the way to the final period.",
+                                    },
+                                    742,
+                                ),
+                            ],
+                        },
+                    ],
+                },
+
                 code: {
                     title: 'Синтаксис кода (PY / JS)',
                     modules: [
@@ -3547,6 +4069,7 @@
 
             const ARCADE_POOLS = {
                 ru: ['ритм', 'клавиша', 'скорость', 'фокус', 'текст', 'экран', 'тишина', 'поток', 'точность', 'уровень', 'система', 'модуль', 'палец', 'движение', 'привычка', 'строка', 'слово', 'сигнал', 'баланс', 'время', 'курс', 'логика', 'форма', 'память', 'результат', 'шаг', 'линия', 'сетка', 'свет', 'контраст', 'знак', 'чистота', 'темп', 'навык', 'практика', 'метод', 'цикл', 'отклик', 'импульс', 'алгоритм', 'прогресс', 'порядок', 'свобода', 'решение', 'внимание', 'структура'],
+                en: ['rhythm', 'focus', 'speed', 'clean', 'typing', 'screen', 'quiet', 'stream', 'steady', 'level', 'system', 'module', 'finger', 'motion', 'habit', 'string', 'signal', 'balance', 'course', 'logic', 'shape', 'memory', 'result', 'bright', 'contrast', 'simple', 'method', 'cycle', 'cursor', 'matrix', 'sprint', 'craft', 'modern', 'minimal', 'vector', 'pixel', 'smooth', 'horizon', 'moment', 'energy', 'design', 'vision', 'sharp', 'target', 'active', 'power'],
                 code: ['const', 'return', 'function', 'async', 'await', 'if (x > 0)', 'map(i => i)', 'filter(x => x != null)', 'def main():', 'for i in range(10):', '{ id, name }', '[0, 1, 2]', 'status === 200', 'err != null', 'export default', 'import { api }', 'len(items)', 'print(res)', 'value += 1;', 'key: "value"', 'Math.round(n)', 'acc >= 95', 'idx <= len', 'a !== b', '!locked && ready', '`${cpm}`'],
             };
 
@@ -3575,12 +4098,26 @@
             const FREEZE_COST = 250;
             const MAX_FREEZES = 3;
 
-            const ACCENT_THEMES = [
-                { id: 'default', name: 'Nothing', minLvl: 1, c1: '#D71921', c2: '#EAB308' },
-                { id: 'amber', name: 'Янтарь', minLvl: 3, c1: '#EA580C', c2: '#F59E0B' },
-                { id: 'mint', name: 'Мята', minLvl: 5, c1: '#059669', c2: '#34D399' },
-                { id: 'mono', name: 'Монохром', minLvl: 8, c1: '#EFEFF1', c2: '#71717A' },
-            ];
+            const THEME_ACCENTS = {
+                oled: [
+                    { slot: 0, name: 'Nothing', minLvl: 1, red: '#D71921', yellow: '#EAB308' },
+                    { slot: 1, name: 'Янтарь', minLvl: 3, red: '#F97316', yellow: '#FACC15' },
+                    { slot: 2, name: 'Мята', minLvl: 5, red: '#10B981', yellow: '#34D399' },
+                    { slot: 3, name: 'Лёд', minLvl: 8, red: '#38BDF8', yellow: '#E2E8F0' },
+                ],
+                dark: [
+                    { slot: 0, name: 'Коралл', minLvl: 1, red: '#FF4D57', yellow: '#FACC15' },
+                    { slot: 1, name: 'Неон', minLvl: 3, red: '#FB923C', yellow: '#FDE047' },
+                    { slot: 2, name: 'Изумруд', minLvl: 5, red: '#2DD4BF', yellow: '#6EE7B7' },
+                    { slot: 3, name: 'Индиго', minLvl: 8, red: '#818CF8', yellow: '#C7D2FE' },
+                ],
+                light: [
+                    { slot: 0, name: 'Кармин', minLvl: 1, red: '#C8102E', yellow: '#B45309' },
+                    { slot: 1, name: 'Кобальт', minLvl: 3, red: '#1D4ED8', yellow: '#0284C7' },
+                    { slot: 2, name: 'Хвоя', minLvl: 5, red: '#047857', yellow: '#0F766E' },
+                    { slot: 3, name: 'Графит', minLvl: 8, red: '#111827', yellow: '#4B5563' },
+                ],
+            };
 
             const SOUND_PROFILES = [
                 { id: 'pop', name: 'Pop', minLvl: 1 },
@@ -3601,7 +4138,7 @@
                 { id: 'chars_5k', name: 'Разминка', desc: 'Набрать 5 000 символов суммарно', xp: 50, progress: (p) => `${Math.min(5000, p.stats.totalChars).toLocaleString('ru-RU')} / 5 000` },
                 { id: 'chars_25k', name: 'Книгопечатник', desc: 'Набрать 25 000 символов суммарно', xp: 120, progress: (p) => `${Math.min(25000, p.stats.totalChars).toLocaleString('ru-RU')} / 25 000` },
                 { id: 'sprinter', name: 'Спринтер', desc: 'Завершить 10 спринтов в Аркаде', xp: 80, progress: (p) => `${Math.min(10, p.stats.sprintsCompleted || 0)} / 10` },
-                { id: 'polyglot', name: 'Полиглот', desc: 'Пройти минимум по 1 модулю в RU и Коде', xp: 75, progress: (p) => `${(hasAnyModDone(p, 'ru') ? 1 : 0) + (hasAnyModDone(p, 'code') ? 1 : 0)} / 2` },
+                { id: 'polyglot', name: 'Полиглот', desc: 'Пройти минимум по 1 модулю в 2 разных курсах', xp: 75, progress: (p) => `${Math.min(2, Object.keys(COURSES).filter((c) => hasAnyModDone(p, c)).length)} / 2` },
             ];
 
             function hasAnyModDone(p, courseId = null) {
@@ -3657,7 +4194,7 @@
                     chars_5k: p.stats.totalChars >= 5000,
                     chars_25k: p.stats.totalChars >= 25000,
                     sprinter: (p.stats.sprintsCompleted || 0) >= 10,
-                    polyglot: hasAnyModDone(p, 'ru') && hasAnyModDone(p, 'code'),
+                    polyglot: Object.keys(COURSES).filter((c) => hasAnyModDone(p, c)).length >= 2,
                 };
 
                 let unlockedAny = false;
@@ -3689,9 +4226,15 @@
                 { id: 'code-m3', name: 'Логик', req: 'CODE · Модуль 03', tier: 'mod', check: (p) => isModDone(p, 'code', 2) },
                 { id: 'code-m4', name: 'Синтаксис', req: 'CODE · Модуль 04', tier: 'mod', check: (p) => isModDone(p, 'code', 3) },
                 { id: 'code-m5', name: 'Инженер', req: 'CODE · Модуль 05', tier: 'mod', check: (p) => isModDone(p, 'code', 4) },
+                { id: 'en-m1', name: 'Ориентир', req: 'EN · Модуль 01', tier: 'mod', check: (p) => isModDone(p, 'en', 0) },
+                { id: 'en-m2', name: 'Импульс', req: 'EN · Модуль 02', tier: 'mod', check: (p) => isModDone(p, 'en', 1) },
+                { id: 'en-m3', name: 'Беглость', req: 'EN · Модуль 03', tier: 'mod', check: (p) => isModDone(p, 'en', 2) },
+                { id: 'en-m4', name: 'Чистота', req: 'EN · Модуль 04', tier: 'mod', check: (p) => isModDone(p, 'en', 3) },
+                { id: 'en-m5', name: 'Поток', req: 'EN · Модуль 05', tier: 'mod', check: (p) => isModDone(p, 'en', 4) },
                 { id: 'master-ru', name: 'Мастер слепой печати', req: 'Весь курс RU', tier: 'master', check: (p) => isCourseDone(p, 'ru') },
+                { id: 'master-en', name: 'Мастер английской печати', req: 'Весь курс EN', tier: 'master', check: (p) => isCourseDone(p, 'en') },
                 { id: 'master-code', name: 'Мастер синтаксиса', req: 'Весь курс CODE', tier: 'master', check: (p) => isCourseDone(p, 'code') },
-                { id: 'legend', name: 'Архитектор клавиатуры', req: 'Оба курса на 100%', tier: 'legend', check: (p) => isCourseDone(p, 'ru') && isCourseDone(p, 'code') },
+                { id: 'legend', name: 'Архитектор клавиатуры', req: 'Все 3 курса на 100%', tier: 'legend', check: (p) => isCourseDone(p, 'ru') && isCourseDone(p, 'en') && isCourseDone(p, 'code') },
             ];
 
             function isModDone(p, courseId, modIdx) {
@@ -3802,7 +4345,7 @@
             }
 
             const DEFAULT_SETTINGS = {
-                volume: 65,
+                volume: 80,
                 muted: false,
                 activeUserKey: null,
                 courseId: 'ru',
@@ -3815,7 +4358,8 @@
                 caretStyle: 'line',
                 analyticsPeriod: 14,
                 chartType: 'line',
-                accentTheme: 'default',
+                surfaceTheme: 'oled',
+                accentSlot: 0,
                 soundProfile: 'pop',
             };
 
@@ -3824,9 +4368,12 @@
             if (globalSettings.topMode !== 'path' && globalSettings.topMode !== 'arcade') globalSettings.topMode = 'path';
             if (!ARCADE_POOLS[globalSettings.arcadePreset]) globalSettings.arcadePreset = 'ru';
             if (![0, 15, 30, 60].includes(globalSettings.sprintSec)) globalSettings.sprintSec = 0;
-            if (!['sm', 'md', 'lg'].includes(globalSettings.fontSize)) globalSettings.fontSize = 'md';
+            if (!['xs', 'sm', 'md', 'lg', 'xl'].includes(globalSettings.fontSize)) globalSettings.fontSize = 'md';
             if (!['line', 'block', 'underline'].includes(globalSettings.caretStyle)) globalSettings.caretStyle = 'line';
-            if (typeof globalSettings.volume !== 'number' || Number.isNaN(globalSettings.volume)) globalSettings.volume = 65;
+            if (!['oled', 'dark', 'light'].includes(globalSettings.surfaceTheme)) globalSettings.surfaceTheme = 'oled';
+            if (typeof globalSettings.accentSlot !== 'number' || globalSettings.accentSlot < 0 || globalSettings.accentSlot > 3) globalSettings.accentSlot = 0;
+            if (typeof globalSettings.volume !== 'number' || Number.isNaN(globalSettings.volume)) globalSettings.volume = 80;
+            globalSettings.volume = Math.max(0, Math.min(200, globalSettings.volume));
             if (globalSettings.chartType !== 'line' && globalSettings.chartType !== 'bar') globalSettings.chartType = 'line';
 
             function normalizeProgress(p) {
@@ -3915,19 +4462,32 @@
                 writeJSON(KEY_GLOBAL, globalSettings);
             }
 
+            function ensureDailyFresh(p) {
+                const today = dateStamp();
+                if (p.dailyDate !== today) {
+                    p.dailyXp = 0;
+                    p.dailyBoostUsed = 0;
+                    p.dailyDate = today;
+                }
+                return p;
+            }
+
+            // Нормализуем сохранённые профили один раз при запуске
+            Object.values(usersDb).forEach((rec) => {
+                if (rec) rec.progress = normalizeProgress(rec.progress);
+            });
+
             function getCurrentUserRecord() {
                 if (!globalSettings.activeUserKey) return null;
                 const rec = usersDb[globalSettings.activeUserKey];
                 if (!rec) return null;
-                rec.progress = normalizeProgress(rec.progress);
+                ensureDailyFresh(rec.progress);
                 return rec;
             }
 
             function getActiveProgress() {
                 const user = getCurrentUserRecord();
-                if (user) return user.progress;
-                guestData = normalizeProgress(guestData);
-                return guestData;
+                return user ? user.progress : ensureDailyFresh(guestData);
             }
 
             function persistProgress() {
@@ -3985,11 +4545,27 @@
 
             // ================= 4. ЗВУК КЛАВИШ И UI-КНОПОК =================
             let audioCtx = null;
+            let masterOut = null;
 
             function getAudioCtx() {
-                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    const comp = audioCtx.createDynamicsCompressor();
+                    comp.threshold.setValueAtTime(-10, audioCtx.currentTime);
+                    comp.knee.setValueAtTime(12, audioCtx.currentTime);
+                    comp.ratio.setValueAtTime(6, audioCtx.currentTime);
+                    comp.attack.setValueAtTime(0.002, audioCtx.currentTime);
+                    comp.release.setValueAtTime(0.08, audioCtx.currentTime);
+                    comp.connect(audioCtx.destination);
+                    masterOut = comp;
+                }
                 if (audioCtx.state === 'suspended') audioCtx.resume();
                 return audioCtx;
+            }
+
+            function getMasterOut() {
+                getAudioCtx();
+                return masterOut;
             }
 
             let noiseBuffer = null;
@@ -4010,7 +4586,7 @@
             }
 
             function playPop(isError = false, overrideProfile = null) {
-                const volRatio = globalSettings.muted ? 0 : globalSettings.volume / 100;
+                const volRatio = globalSettings.muted ? 0 : (globalSettings.volume / 100) * 1.15;
                 if (volRatio <= 0.001) return;
 
                 const ctx = getAudioCtx();
@@ -4032,7 +4608,7 @@
                     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
                     osc.connect(filter);
                     filter.connect(gain);
-                    gain.connect(ctx.destination);
+                    gain.connect(getMasterOut(ctx));
                     osc.start(now);
                     osc.stop(now + 0.06);
                     return;
@@ -4048,7 +4624,7 @@
                     gain.gain.linearRampToValueAtTime(0.32 * volRatio, now + 0.0015);
                     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.016);
                     osc.connect(gain);
-                    gain.connect(ctx.destination);
+                    gain.connect(getMasterOut(ctx));
                     osc.start(now);
                     osc.stop(now + 0.02);
                     return;
@@ -4068,7 +4644,7 @@
                     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.052);
                     osc.connect(filter);
                     filter.connect(gain);
-                    gain.connect(ctx.destination);
+                    gain.connect(getMasterOut(ctx));
                     osc.start(now);
                     osc.stop(now + 0.058);
 
@@ -4082,7 +4658,7 @@
                     ng.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
                     src.connect(nf);
                     nf.connect(ng);
-                    ng.connect(ctx.destination);
+                    ng.connect(getMasterOut());
                     src.start(now);
                     src.stop(now + 0.025);
                     return;
@@ -4099,7 +4675,7 @@
                     ng.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
                     src.connect(nf);
                     nf.connect(ng);
-                    ng.connect(ctx.destination);
+                    ng.connect(getMasterOut());
                     src.start(now);
                     src.stop(now + 0.035);
 
@@ -4112,7 +4688,7 @@
                     gain.gain.linearRampToValueAtTime(0.16 * volRatio, now + 0.0015);
                     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
                     osc.connect(gain);
-                    gain.connect(ctx.destination);
+                    gain.connect(getMasterOut(ctx));
                     osc.start(now);
                     osc.stop(now + 0.024);
                     return;
@@ -4132,13 +4708,13 @@
                 gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
                 osc.connect(filter);
                 filter.connect(gain);
-                gain.connect(ctx.destination);
+                gain.connect(getMasterOut());
                 osc.start(now);
                 osc.stop(now + 0.05);
             }
 
             function playUiClick() {
-                const volRatio = globalSettings.muted ? 0 : globalSettings.volume / 100;
+                const volRatio = globalSettings.muted ? 0 : (globalSettings.volume / 100) * 1.15;
                 if (volRatio <= 0.001) return;
 
                 const ctx = getAudioCtx();
@@ -4163,7 +4739,7 @@
 
                 osc.connect(filter);
                 filter.connect(gain);
-                gain.connect(ctx.destination);
+                gain.connect(getMasterOut());
                 osc.start(now);
                 osc.stop(now + 0.032);
             }
@@ -4174,6 +4750,7 @@
                 if (target.disabled || target.classList.contains('locked') || target.classList.contains('locked-opt') || target.classList.contains('btn-locked') || target.classList.contains('locked-step')) return;
                 if (target.id === 'muteBtn') return;
                 if (target.classList.contains('stage-step') && !target.classList.contains('clickable')) return;
+                if (target.id === 'muteBtn' || target.id === 'testSoundBtn' || target.closest('#soundSeg')) return;
                 playUiClick();
             });
 
@@ -4213,31 +4790,115 @@
                 persistGlobal();
             });
 
+            document.getElementById('testSoundBtn').addEventListener('click', () => {
+                if (globalSettings.muted || globalSettings.volume === 0) {
+                    showToast('Звук выключен');
+                    return;
+                }
+                playPop(false);
+            });
+
             // ================= 5. КАСТОМИЗАЦИЯ ИНТЕРФЕЙСА =================
-            function getActiveThemeId() {
+            function getActiveAccentObj() {
+                const surface = globalSettings.surfaceTheme || 'oled';
+                const list = THEME_ACCENTS[surface] || THEME_ACCENTS.oled;
                 const lvl = getLevelInfo(getActiveProgress().totalXp).level;
-                const th = ACCENT_THEMES.find((t) => t.id === globalSettings.accentTheme);
-                return th && lvl >= th.minLvl ? th.id : 'default';
+                const picked = list[globalSettings.accentSlot] || list[0];
+                return lvl >= picked.minLvl ? picked : list[0];
             }
 
             function applyAppearanceSettings() {
-                const themeId = getActiveThemeId();
+                const surface = globalSettings.surfaceTheme || 'oled';
+                const accent = getActiveAccentObj();
+
+                document.body.dataset.surface = surface;
                 document.body.dataset.fontSize = globalSettings.fontSize;
                 document.body.dataset.caret = globalSettings.caretStyle;
-                document.body.dataset.theme = themeId;
 
+                document.documentElement.style.setProperty('--accent-red', accent.red);
+                document.documentElement.style.setProperty('--accent-yellow', accent.yellow);
+
+                document.querySelectorAll('#surfaceSeg button').forEach((b) => b.classList.toggle('active', b.dataset.surface === surface));
                 document.querySelectorAll('#fontSizeSeg button').forEach((b) => b.classList.toggle('active', b.dataset.size === globalSettings.fontSize));
                 document.querySelectorAll('#caretStyleSeg button').forEach((b) => b.classList.toggle('active', b.dataset.caret === globalSettings.caretStyle));
+
                 document.getElementById('kbdToggleBtn').classList.toggle('on', !!globalSettings.showKeyboard);
                 document.getElementById('ghostToggleBtn').classList.toggle('on', !!globalSettings.ghostCaret);
                 document.getElementById('visualKbd').classList.toggle('visible', !!globalSettings.showKeyboard);
 
-                const pxMap = { sm: '20 px', md: '24 px', lg: '28 px' };
+                const sizeMap = { xs: 'XS · 17 px', sm: 'S · 20 px', md: 'M · 24 px', lg: 'L · 29 px', xl: 'XL · 35 px' };
                 const caretMap = { line: 'Линия', block: 'Блок', underline: 'Черта' };
-                const thName = (ACCENT_THEMES.find((t) => t.id === themeId) || ACCENT_THEMES[0]).name;
+                const surfMap = { oled: 'OLED', dark: 'Тёмная', light: 'Светлая' };
                 const meta = document.getElementById('previewMeta');
-                if (meta) meta.textContent = `${pxMap[globalSettings.fontSize]} · ${caretMap[globalSettings.caretStyle]} · ${thName}`;
+                if (meta) meta.textContent = `${sizeMap[globalSettings.fontSize]} · ${caretMap[globalSettings.caretStyle]} · ${surfMap[surface]} (${accent.name})`;
             }
+
+            function renderCustomizationUnlockables(p) {
+                const lvl = getLevelInfo(p.totalXp).level;
+                const surface = globalSettings.surfaceTheme || 'oled';
+                const accents = THEME_ACCENTS[surface] || THEME_ACCENTS.oled;
+                const activeAccent = getActiveAccentObj();
+                const activeSound = getActiveSoundProfile();
+
+                const themeSeg = document.getElementById('themeSeg');
+                themeSeg.innerHTML = '';
+                accents.forEach((t) => {
+                    const unlocked = lvl >= t.minLvl;
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = (activeAccent.slot === t.slot ? 'active ' : '') + (unlocked ? '' : 'locked-opt');
+                    btn.innerHTML = `<span class="swatch-pair">` + `<span class="swatch-dot" style="background:${t.red}"></span>` + `<span class="swatch-dot" style="background:${t.yellow}"></span>` + `</span>` + `<span>${t.name}</span>` + (unlocked ? '' : `<span class="lvl-tag">L${t.minLvl}</span>`);
+
+                    if (unlocked) {
+                        btn.addEventListener('click', () => {
+                            globalSettings.accentSlot = t.slot;
+                            persistGlobal();
+                            applyAppearanceSettings();
+                            renderCustomizationUnlockables(p);
+                        });
+                    } else {
+                        btn.setAttribute('aria-disabled', 'true');
+                        btn.addEventListener('click', () => {
+                            showLockHint(btn, `Откроется на LVL ${String(t.minLvl).padStart(2, '0')} (сейчас LVL ${String(lvl).padStart(2, '0')})`);
+                        });
+                    }
+                    themeSeg.appendChild(btn);
+                });
+
+                const soundSeg = document.getElementById('soundSeg');
+                soundSeg.innerHTML = '';
+                SOUND_PROFILES.forEach((s) => {
+                    const unlocked = lvl >= s.minLvl;
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = (activeSound === s.id ? 'active ' : '') + (unlocked ? '' : 'locked-opt');
+                    btn.innerHTML = `<span>${s.name}</span>${unlocked ? '' : `<span class="lvl-tag">L${s.minLvl}</span>`}`;
+
+                    if (unlocked) {
+                        btn.addEventListener('click', () => {
+                            globalSettings.soundProfile = s.id;
+                            persistGlobal();
+                            renderCustomizationUnlockables(p);
+                            playPop(false, s.id);
+                        });
+                    } else {
+                        btn.setAttribute('aria-disabled', 'true');
+                        btn.addEventListener('click', () => {
+                            showLockHint(btn, `Откроется на LVL ${String(s.minLvl).padStart(2, '0')} (сейчас LVL ${String(lvl).padStart(2, '0')})`);
+                        });
+                    }
+                    soundSeg.appendChild(btn);
+                });
+            }
+
+            document.querySelectorAll('#surfaceSeg button').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    globalSettings.surfaceTheme = btn.dataset.surface;
+                    persistGlobal();
+                    applyAppearanceSettings();
+                    renderCustomizationUnlockables(getActiveProgress());
+                });
+            });
 
             document.querySelectorAll('#fontSizeSeg button').forEach((btn) => {
                 btn.addEventListener('click', () => {
@@ -4261,6 +4922,7 @@
                 persistGlobal();
                 syncVolumeUI();
                 applyAppearanceSettings();
+                renderCustomizationUnlockables(getActiveProgress());
                 showToast('Настройки сброшены по умолчанию');
             });
 
@@ -4270,7 +4932,20 @@
                 trainer: document.getElementById('screen-trainer'),
                 auth: document.getElementById('screen-auth'),
                 profile: document.getElementById('screen-profile'),
+                settings: document.getElementById('screen-settings'),
             };
+
+            const settingsHeaderBtn = document.getElementById('settingsHeaderBtn');
+
+            function openSettingsScreen() {
+                syncVolumeUI();
+                applyAppearanceSettings();
+                renderCustomizationUnlockables(getActiveProgress());
+                showScreen('settings');
+            }
+
+            settingsHeaderBtn.addEventListener('click', openSettingsScreen);
+            document.getElementById('settingsBackBtn').addEventListener('click', () => setTopMode(currentTopMode));
 
             const profileHeaderBtn = document.getElementById('profileHeaderBtn');
             const headerAvatar = document.getElementById('headerAvatar');
@@ -4318,6 +4993,7 @@
                     if (b.dataset.mode === 'arcade') b.classList.toggle('active', isArcade);
                 });
 
+                settingsHeaderBtn.classList.toggle('active-screen', name === 'settings');
                 syncHeaderProfileUI(name);
             }
 
@@ -4598,14 +5274,14 @@
                             const bh = Math.max(5, ((item.cpm - minCpm) / span) * (h - padY * 2));
                             const x = startX + i * bw;
                             const y = h - padY - bh;
-                            const fill = item.cpm === maxCpm ? 'var(--accent-yellow)' : '#6E727D';
+                            const fill = item.cpm === maxCpm ? 'var(--accent-yellow)' : 'var(--text-muted)';
                             return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" fill="${fill}" stroke="var(--bg)" stroke-width="1"><title>${item.date || ''} · ${item.cpm} букв/мин · ${item.acc}%</title></rect>`;
                         })
                         .join('');
 
                     box.innerHTML = `
           <svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="display:block; max-width:100%;">
-            <line x1="${padX}" y1="${h - padY}" x2="${w - padX}" y2="${h - padY}" stroke="#222429" />
+            <line x1="${padX}" y1="${h - padY}" x2="${w - padX}" y2="${h - padY}" stroke="var(--border)" />
             ${bars}
           </svg>`;
                     return;
@@ -4617,15 +5293,13 @@
                     return { x, y, item };
                 });
                 const pathD = pts.map((pt, i) => `${i === 0 ? 'M' : 'L'}${pt.x.toFixed(1)},${pt.y.toFixed(1)}`).join(' ');
-                const areaD = `${pathD} L${pts[pts.length - 1].x.toFixed(1)},${h - padY} L${pts[0].x.toFixed(1)},${h - padY} Z`;
                 const circles = pts.map((pt) => `<circle cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="3.2" fill="var(--accent-yellow)"><title>${pt.item.date || ''} · ${pt.item.cpm} букв/мин · ${pt.item.acc}%</title></circle>`).join('');
 
                 box.innerHTML = `
         <svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="display:block; max-width:100%;">
-          <line x1="${padX}" y1="${padY}" x2="${w - padX}" y2="${padY}" stroke="#222429" stroke-dasharray="3 3" />
-          <line x1="${padX}" y1="${h - padY}" x2="${w - padX}" y2="${h - padY}" stroke="#222429" />
-          ${type === 'area' ? `<path d="${areaD}" fill="var(--accent-yellow)" fill-opacity="0.14" />` : ''}
-          <path d="${pathD}" fill="none" stroke="#EFEFF1" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" />
+          <line x1="${padX}" y1="${padY}" x2="${w - padX}" y2="${padY}" stroke="var(--border)" stroke-dasharray="3 3" />
+          <line x1="${padX}" y1="${h - padY}" x2="${w - padX}" y2="${h - padY}" stroke="var(--border)" />
+          <path d="${pathD}" fill="none" stroke="var(--text-main)" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" />
           ${circles}
         </svg>`;
             }
@@ -4634,7 +5308,11 @@
             window.addEventListener('resize', () => {
                 if (!screens.profile.classList.contains('active')) return;
                 clearTimeout(chartResizeTimer);
-                chartResizeTimer = setTimeout(() => renderDynamicsChart(getActiveProgress()), 100);
+                chartResizeTimer = setTimeout(() => {
+                    const p = getActiveProgress();
+                    renderDynamicsChart(p);
+                    renderActivityMatrix(p);
+                }, 100);
             });
 
             const achModal = document.getElementById('achModal');
@@ -4704,65 +5382,6 @@
                 renderAchievementsAndFreeze(p);
                 showToast('Куплена 1 заморозка серии');
             });
-
-            function renderCustomizationUnlockables(p) {
-                const lvl = getLevelInfo(p.totalXp).level;
-                const activeTheme = getActiveThemeId();
-                const activeSound = getActiveSoundProfile();
-
-                const themeSeg = document.getElementById('themeSeg');
-                themeSeg.innerHTML = '';
-                ACCENT_THEMES.forEach((t) => {
-                    const unlocked = lvl >= t.minLvl;
-                    const btn = document.createElement('button');
-                    btn.type = 'button';
-                    btn.className = (activeTheme === t.id ? 'active ' : '') + (unlocked ? '' : 'locked-opt');
-                    btn.innerHTML = `<span class="swatch-pair">` + `<span class="swatch-dot" style="background:${t.c1}"></span>` + `<span class="swatch-dot" style="background:${t.c2}"></span>` + `</span>` + `<span>${t.name}</span>` + (unlocked ? '' : `<span class="lvl-tag">L${t.minLvl}</span>`);
-
-                    if (unlocked) {
-                        btn.addEventListener('click', () => {
-                            globalSettings.accentTheme = t.id;
-                            persistGlobal();
-                            applyAppearanceSettings();
-                            renderCustomizationUnlockables(p);
-                            renderDynamicsChart(p);
-                        });
-                    } else {
-                        btn.setAttribute('aria-disabled', 'true');
-                        btn.addEventListener('click', () => {
-                            showLockHint(btn, `Откроется на LVL ${String(t.minLvl).padStart(2, '0')} (сейчас LVL ${String(lvl).padStart(2, '0')})`);
-                        });
-                    }
-
-                    themeSeg.appendChild(btn);
-                });
-
-                const soundSeg = document.getElementById('soundSeg');
-                soundSeg.innerHTML = '';
-                SOUND_PROFILES.forEach((s) => {
-                    const unlocked = lvl >= s.minLvl;
-                    const btn = document.createElement('button');
-                    btn.type = 'button';
-                    btn.className = (activeSound === s.id ? 'active ' : '') + (unlocked ? '' : 'locked-opt');
-                    btn.innerHTML = `<span>${s.name}</span>${unlocked ? '' : `<span class="lvl-tag">L${s.minLvl}</span>`}`;
-
-                    if (unlocked) {
-                        btn.addEventListener('click', () => {
-                            globalSettings.soundProfile = s.id;
-                            persistGlobal();
-                            renderCustomizationUnlockables(p);
-                            playPop(false, s.id);
-                        });
-                    } else {
-                        btn.setAttribute('aria-disabled', 'true');
-                        btn.addEventListener('click', () => {
-                            showLockHint(btn, `Откроется на LVL ${String(s.minLvl).padStart(2, '0')} (сейчас LVL ${String(lvl).padStart(2, '0')})`);
-                        });
-                    }
-
-                    soundSeg.appendChild(btn);
-                });
-            }
 
             function renderActivityMatrix(progress) {
                 const grid = document.getElementById('activityMatrix');
@@ -4913,7 +5532,13 @@
                         if (user) user.progress = clean;
                         else guestData = clean;
                         persistProgress();
-                        openProfileScreen();
+                        syncHeaderProfileUI();
+                        applyAppearanceSettings();
+                        if (screens.profile.classList.contains('active')) openProfileScreen();
+                        else {
+                            renderCustomizationUnlockables(getActiveProgress());
+                            renderDailyGoal();
+                        }
                         showToast('Прогресс успешно импортирован');
                     } catch (err) {
                         showToast('Ошибка чтения JSON-файла');
@@ -4960,15 +5585,20 @@
                 document.getElementById('statTotalChars').textContent = p.stats.totalChars.toLocaleString('ru-RU');
 
                 const ruIds = getFlatLessonIds('ru');
+                const enIds = getFlatLessonIds('en');
                 const codeIds = getFlatLessonIds('code');
                 const ruDone = ruIds.filter((id) => p.completedLessons.includes(id)).length;
+                const enDone = enIds.filter((id) => p.completedLessons.includes(id)).length;
                 const codeDone = codeIds.filter((id) => p.completedLessons.includes(id)).length;
 
-                document.getElementById('statLessonsCount').textContent = `${ruDone + codeDone} / ${TOTAL_LESSONS_COUNT}`;
+                document.getElementById('statLessonsCount').textContent = `${ruDone + enDone + codeDone} / ${TOTAL_LESSONS_COUNT}`;
                 document.getElementById('statStagesCount').textContent = `${p.completedStages.length} / ${TOTAL_STAGES_COUNT}`;
 
                 document.getElementById('progRuText').textContent = `${ruDone} / ${ruIds.length} уроков`;
                 document.getElementById('progRuBar').style.width = `${Math.round((ruDone / ruIds.length) * 100)}%`;
+
+                document.getElementById('progEnText').textContent = `${enDone} / ${enIds.length} уроков`;
+                document.getElementById('progEnBar').style.width = `${Math.round((enDone / enIds.length) * 100)}%`;
 
                 document.getElementById('progCodeText').textContent = `${codeDone} / ${codeIds.length} уроков`;
                 document.getElementById('progCodeBar').style.width = `${Math.round((codeDone / codeIds.length) * 100)}%`;
@@ -4985,7 +5615,6 @@
                 renderActivityMatrix(p);
                 renderTitles(p);
                 renderAchievementsAndFreeze(p);
-                renderCustomizationUnlockables(p);
                 applyAppearanceSettings();
             }
 
@@ -5309,16 +5938,21 @@
 
             function getSessionLang() {
                 if (!activeSession) return 'ru';
-                if (activeSession.type === 'lesson') return activeSession.courseId === 'code' ? 'en' : 'ru';
-                if (activeSession.type === 'arcade') return activeSession.preset === 'code' ? 'en' : 'ru';
+                if (activeSession.type === 'lesson') return activeSession.courseId === 'ru' ? 'ru' : 'en';
+                if (activeSession.type === 'arcade') return activeSession.preset === 'ru' ? 'ru' : 'en';
                 if (activeSession.type === 'mistakes') return activeSession.lang;
                 return 'ru';
             }
+
+            const kbdKeyMap = new Map();
+            let activeKbdEls = [];
 
             function renderVisualKeyboard() {
                 const lang = getSessionLang();
                 const rows = KBD_LAYOUTS[lang];
                 visualKbd.innerHTML = '';
+                kbdKeyMap.clear();
+                activeKbdEls = [];
 
                 rows.forEach((row) => {
                     const rEl = document.createElement('div');
@@ -5326,8 +5960,8 @@
                     row.forEach((ch) => {
                         const k = document.createElement('span');
                         k.className = 'kbd-key';
-                        k.dataset.key = ch;
                         k.textContent = ch;
+                        kbdKeyMap.set(ch, k);
                         rEl.appendChild(k);
                     });
                     visualKbd.appendChild(rEl);
@@ -5335,21 +5969,39 @@
 
                 const spaceRow = document.createElement('div');
                 spaceRow.className = 'kbd-row';
-                spaceRow.innerHTML = `<span class="kbd-key" data-key="shift">Shift</span><span class="kbd-key space" data-key=" ">Пробел</span>`;
+                const shiftEl = document.createElement('span');
+                shiftEl.className = 'kbd-key';
+                shiftEl.textContent = 'Shift';
+                const spaceEl = document.createElement('span');
+                spaceEl.className = 'kbd-key space';
+                spaceEl.textContent = 'Пробел';
+                kbdKeyMap.set('shift', shiftEl);
+                kbdKeyMap.set(' ', spaceEl);
+                spaceRow.append(shiftEl, spaceEl);
                 visualKbd.appendChild(spaceRow);
                 highlightNextKey();
             }
 
             function highlightNextKey() {
                 if (!globalSettings.showKeyboard) return;
-                visualKbd.querySelectorAll('.kbd-key').forEach((k) => k.classList.remove('target', 'shift-active'));
+                for (const el of activeKbdEls) el.classList.remove('target', 'shift-active');
+                activeKbdEls = [];
+
                 const nextCh = targetText[cursor];
                 if (!nextCh) return;
                 const lower = nextCh.toLowerCase();
-                const needShift = nextCh !== lower && /[A-ZА-ЯЁ]/.test(nextCh);
-                if (needShift) visualKbd.querySelector('[data-key="shift"]')?.classList.add('shift-active');
-                const match = visualKbd.querySelector(`[data-key="${CSS.escape(lower)}"]`);
-                if (match) match.classList.add('target');
+                if (nextCh !== lower && /[A-ZА-ЯЁ]/.test(nextCh)) {
+                    const sh = kbdKeyMap.get('shift');
+                    if (sh) {
+                        sh.classList.add('shift-active');
+                        activeKbdEls.push(sh);
+                    }
+                }
+                const match = kbdKeyMap.get(lower);
+                if (match) {
+                    match.classList.add('target');
+                    activeKbdEls.push(match);
+                }
             }
 
             document.getElementById('kbdToggleBtn').addEventListener('click', () => {
@@ -5421,8 +6073,7 @@
             function syncScrollToCursor() {
                 const activeSpan = charSpans[cursor];
                 if (!activeSpan) return;
-                const lh = parseInt(getComputedStyle(wordsBox).lineHeight, 10) || 44;
-                wordsBox.scrollTop = Math.max(0, activeSpan.offsetTop - lh);
+                wordsBox.scrollTop = Math.max(0, activeSpan.offsetTop - cachedLineHeight);
             }
 
             function updateMetrics() {
@@ -5470,24 +6121,26 @@
                 persistProgress();
             }
 
+            let cachedLineHeight = 44;
+
             function mountText(text, resetMetrics = true) {
-                stopTimers();
                 targetText = text;
                 cursor = 0;
-                batchTyped = 0;
-                batchErrors = 0;
                 wrongLayoutStreak = 0;
-                ghostIdx = -1;
                 isStageFinished = false;
                 setLayoutAlert(null);
                 stageResult.classList.remove('visible');
                 enterHint.style.display = 'none';
 
                 if (resetMetrics) {
+                    stopTimers();
                     totalTyped = 0;
                     correctCount = 0;
                     errors = 0;
+                    batchTyped = 0;
+                    batchErrors = 0;
                     startTime = null;
+                    ghostIdx = -1;
                     updateMetrics();
                     document.body.classList.remove('is-typing');
 
@@ -5498,6 +6151,9 @@
                     } else {
                         timerMetric.style.display = 'none';
                     }
+                } else {
+                    clearInterval(ghostInterval);
+                    ghostIdx = -1;
                 }
 
                 progressFill.style.width = '0%';
@@ -5514,8 +6170,11 @@
                     charSpans.push(span);
                 }
                 wordsBox.appendChild(frag);
+                cachedLineHeight = parseInt(getComputedStyle(wordsBox).lineHeight, 10) || 44;
                 renderVisualKeyboard();
-                setTimeout(focusTypingInput, 30);
+
+                if (resetMetrics) setTimeout(focusTypingInput, 30);
+                else if (globalSettings.ghostCaret && startTime) startGhostCaret();
             }
 
             function renderStageStrip(lesson, currentStageIdx) {
@@ -5588,7 +6247,7 @@
                     const b = weakChars[(i + 1) % weakChars.length];
                     drills.push(a + b + a, b + a + b, a + a + b, a + b + a + b);
                 });
-                const pool = ARCADE_POOLS[lang === 'en' ? 'code' : 'ru'].filter((w) => weakChars.some((c) => w.includes(c)));
+                const pool = ARCADE_POOLS[lang === 'en' ? 'en' : 'ru'].filter((w) => weakChars.some((c) => w.includes(c)));
                 const combined = drills.concat(pool.length ? pool : drills);
                 const text = buildSeq(combined, 190, Math.floor(Math.random() * 500) + 1);
 
@@ -5616,8 +6275,9 @@
                 document.querySelectorAll('.sprint-btn').forEach((b) => b.classList.toggle('active', Number(b.dataset.sprint) === sprintSec));
 
                 const modeTag = sprintSec > 0 ? `SPRINT ${sprintSec}S` : 'ENDLESS';
-                stageLabel.textContent = preset === 'code' ? `ARCADE // CODE · ${modeTag}` : `ARCADE // RU · ${modeTag}`;
-                stageSubhint.textContent = preset === 'code' ? 'Английская раскладка' : 'Русская раскладка';
+                const presetTag = preset === 'code' ? 'CODE' : preset === 'en' ? 'EN' : 'RU';
+                stageLabel.textContent = `ARCADE // ${presetTag} · ${modeTag}`;
+                stageSubhint.textContent = preset === 'ru' ? 'Русская раскладка' : 'Английская раскладка';
 
                 showScreen('trainer');
                 mountText(generateArcadeBatch(preset, sprintSec > 0 ? 45 : 24), true);
@@ -5642,14 +6302,20 @@
                 document.body.classList.remove('is-typing');
                 const { cpm, wpm, acc } = updateMetrics();
                 recordSessionStats(cpm, wpm, acc, batchTyped, batchErrors);
-                checkAchievements({ type: 'sprint', cpm, acc, errors: batchErrors });
 
-                const baseXp = Math.max(5, Math.round(activeSession.sprintSec / 3));
+                const p = getActiveProgress();
+                p.stats.sprintsCompleted = (p.stats.sprintsCompleted || 0) + 1;
+
+                const sprintXpMap = { 15: 4, 30: 8, 60: 16 };
+                const rawXp = sprintXpMap[activeSession.sprintSec] || 6;
+                const baseXp = acc >= 80 ? rawXp : Math.max(2, Math.round(rawXp / 2));
                 const res = grantXp(baseXp);
                 const xpText = res.bonusXp > 0 ? `+${res.totalAdded} XP (×2)` : `+${res.totalAdded} XP`;
 
                 persistProgress();
+                checkAchievements({ type: 'sprint', cpm, acc, errors: batchErrors });
                 renderDailyGoal();
+                syncHeaderProfileUI();
 
                 resultTitle.textContent = `Спринт ${activeSession.sprintSec}с завершён`;
                 resultSub.textContent = `${cpm} букв/мин · ${wpm} сл/мин · Точность ${acc}% · ${xpText}`;
@@ -5664,13 +6330,15 @@
                 document.body.classList.remove('is-typing');
                 const { cpm, wpm, acc } = updateMetrics();
                 recordSessionStats(cpm, wpm, acc, batchTyped, batchErrors);
-                checkAchievements({ type: 'mistakes', cpm, acc, errors: batchErrors });
 
-                const res = grantXp(15);
+                const baseXp = acc >= 80 ? 15 : 5;
+                const res = grantXp(baseXp);
                 const xpText = res.bonusXp > 0 ? `+${res.totalAdded} XP (×2)` : `+${res.totalAdded} XP`;
 
                 persistProgress();
+                checkAchievements({ type: 'mistakes', cpm, acc, errors: batchErrors });
                 renderDailyGoal();
+                syncHeaderProfileUI();
 
                 resultTitle.textContent = 'Работа над ошибками завершена';
                 resultSub.textContent = `${cpm} букв/мин · ${wpm} сл/мин · Точность ${acc}% · ${xpText}`;
@@ -5690,7 +6358,6 @@
                 const { cpm, wpm, acc } = updateMetrics();
 
                 recordSessionStats(cpm, wpm, acc, batchTyped, batchErrors);
-                checkAchievements({ type: 'lesson', cpm, acc, errors: batchErrors });
 
                 const p = getActiveProgress();
                 const sKey = stageKey(lesson.id, stageIdx);
@@ -5719,7 +6386,9 @@
                 }
 
                 persistProgress();
+                checkAchievements({ type: 'lesson', cpm, acc, errors: batchErrors });
                 renderDailyGoal();
+                syncHeaderProfileUI();
                 renderStageStrip(lesson, stageIdx);
 
                 const isLastStage = stageIdx === lesson.stages.length - 1;
@@ -5740,10 +6409,11 @@
 
                 if (isCourseDone(p, courseId) && !p.celebratedCourses.includes(courseId)) {
                     p.celebratedCourses.push(courseId);
-                    const bonus = grantXp(200);
+                    const bonusXp = grantFlatXp(200);
                     persistProgress();
                     renderDailyGoal();
-                    openCourseCelebration(courseId, bonus.totalAdded);
+                    syncHeaderProfileUI();
+                    openCourseCelebration(courseId, bonusXp);
                 } else if (lessonJustUnlockedNext && isModDone(p, courseId, moduleIdx)) {
                     const modTitle = TITLES_CATALOG.find((t) => t.id === mod.id);
                     if (modTitle) showToast(`Открыт новый титул: «${modTitle.name}»`);
@@ -5753,10 +6423,27 @@
             const courseModal = document.getElementById('courseModal');
 
             function openCourseCelebration(courseId, bonusXp) {
-                const isRu = courseId === 'ru';
-                document.getElementById('courseModalTitle').textContent = isRu ? 'Курс «Слепая печать» пройден!' : 'Курс «Синтаксис кода» пройден!';
-                document.getElementById('courseModalDesc').textContent = isRu ? 'Все 6 модулей и 100 этапов позади. Вы освоили всю раскладку ЙЦУКЕН, регистр, пунктуацию и выносливость.' : 'Все 5 модулей и 80 этапов позади. Скобки, операторы и синтаксис Python / JS теперь на мышечной памяти.';
-                document.getElementById('courseModalBadge').textContent = isRu ? 'Мастер слепой печати' : 'Мастер синтаксиса';
+                const map = {
+                    ru: {
+                        title: 'Курс «Слепая печать (RU)» пройден!',
+                        desc: 'Все 6 модулей и 100 этапов позади. Вы освоили всю раскладку ЙЦУКЕН, регистр, пунктуацию и выносливость.',
+                        badge: 'Мастер слепой печати',
+                    },
+                    en: {
+                        title: 'Курс «Слепая печать (EN)» пройден!',
+                        desc: 'Все 5 модулей и 85 этапов позади. Раскладка QWERTY, пунктуация, цифры и беглый английский текст освоены.',
+                        badge: 'Мастер английской печати',
+                    },
+                    code: {
+                        title: 'Курс «Синтаксис кода» пройден!',
+                        desc: 'Все 5 модулей и 80 этапов позади. Скобки, операторы и синтаксис Python / JS теперь на мышечной памяти.',
+                        badge: 'Мастер синтаксиса',
+                    },
+                };
+                const info = map[courseId] || map.ru;
+                document.getElementById('courseModalTitle').textContent = info.title;
+                document.getElementById('courseModalDesc').textContent = info.desc;
+                document.getElementById('courseModalBadge').textContent = info.badge;
                 document.getElementById('courseModalBonus').textContent = `+${bonusXp} XP`;
                 courseModal.classList.add('visible');
             }
@@ -5805,6 +6492,17 @@
             }
 
             typingStage.addEventListener('click', focusTypingInput);
+            document.addEventListener('pointerdown', (e) => {
+                if (!screens.trainer.classList.contains('active')) return;
+                if (e.target.closest('#typingStage')) return;
+
+                if (document.body.classList.contains('is-typing')) {
+                    document.body.classList.remove('is-typing');
+                }
+                if (document.activeElement === hiddenInput) {
+                    hiddenInput.blur();
+                }
+            });
 
             function processBackspace() {
                 if (isStageFinished || cursor <= 0) return;
@@ -5888,6 +6586,8 @@
                             mountText(generateArcadeBatch(activeSession.preset, 45), false);
                         } else {
                             recordSessionStats(m.cpm, m.wpm, m.acc, batchTyped, batchErrors);
+                            batchTyped = 0;
+                            batchErrors = 0;
                             mountText(generateArcadeBatch(activeSession.preset, 24), false);
                         }
                     } else if (activeSession.type === 'mistakes') {
